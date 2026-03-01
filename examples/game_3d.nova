@@ -1,0 +1,25 @@
+import "game"
+
+game.init(800, 600, "3D Demo")
+game.set_fps(60)
+
+let cam = game.camera(10, 10, 10, 0, 0, 0, 45)
+
+while game.is_running() do
+    game.begin_drawing()
+    game.clear(game.SKYBLUE)
+
+    game.begin_3d(cam)
+    game.draw_plane(game.vec3(0, 0, 0), 20, 20, game.GREEN)
+    game.draw_grid(20, 1.0)
+    game.draw_cube(game.vec3(0, 1, 0), 2, 2, 2, game.RED)
+    game.draw_cube_wires(game.vec3(0, 1, 0), 2, 2, 2, game.BLACK)
+    game.draw_sphere(game.vec3(4, 1, 0), 1.0, game.BLUE)
+    game.draw_cylinder(game.vec3(-4, 0, 0), 0.5, 1.0, 3.0, 16, game.PURPLE)
+    game.end_3d()
+
+    game.draw_text("3D Demo", 10, 10, 20, game.WHITE)
+    game.end_drawing()
+done
+
+game.close()

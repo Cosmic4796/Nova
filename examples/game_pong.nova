@@ -1,0 +1,126 @@
+import "game"
+
+let WIDTH = 800
+let HEIGHT = 600
+
+game.init(WIDTH, HEIGHT, "Nova Pong")
+game.set_fps(60)
+
+# Paddle settings
+let PADDLE_W = 15
+let PADDLE_H = 80
+let PADDLE_SPEED = 6
+
+# Left paddle (player 1: W/S)
+let p1_x = 30
+let p1_y = HEIGHT / 2 - PADDLE_H / 2
+
+# Right paddle (player 2: Up/Down)
+let p2_x = WIDTH - 30 - PADDLE_W
+let p2_y = HEIGHT / 2 - PADDLE_H / 2
+
+# Ball
+let ball_x = WIDTH / 2
+let ball_y = HEIGHT / 2
+let ball_size = 10
+let ball_dx = 5
+let ball_dy = 3
+
+# Scores
+let score1 = 0
+let score2 = 0
+
+while game.is_running() do
+    # Player 1 input (W/S)
+    if game.key_down("w") do
+        p1_y = p1_y - PADDLE_SPEED
+    done
+    if game.key_down("s") do
+        p1_y = p1_y + PADDLE_SPEED
+    done
+
+    # Player 2 input (Up/Down)
+    if game.key_down("up") do
+        p2_y = p2_y - PADDLE_SPEED
+    done
+    if game.key_down("down") do
+        p2_y = p2_y + PADDLE_SPEED
+    done
+
+    # Clamp paddles to screen
+    if p1_y < 0 do p1_y = 0 done
+    if p1_y > HEIGHT - PADDLE_H do p1_y = HEIGHT - PADDLE_H done
+    if p2_y < 0 do p2_y = 0 done
+    if p2_y > HEIGHT - PADDLE_H do p2_y = HEIGHT - PADDLE_H done
+
+    # Move ball
+    ball_x = ball_x + ball_dx
+    ball_y = ball_y + ball_dy
+
+    # Ball bounce off top/bottom
+    if ball_y <= 0 do
+        ball_y = 0
+        ball_dy = 0 - ball_dy
+    done
+    if ball_y >= HEIGHT - ball_size do
+        ball_y = HEIGHT - ball_size
+        ball_dy = 0 - ball_dy
+    done
+
+    # Ball collision with left paddle
+    if game.check_collision_rects(ball_x, ball_y, ball_size, ball_size, p1_x, p1_y, PADDLE_W, PADDLE_H) do
+        ball_dx = 0 - ball_dx
+        ball_x = p1_x + PADDLE_W
+    done
+
+    # Ball collision with right paddle
+    if game.check_collision_rects(ball_x, ball_y, ball_size, ball_size, p2_x, p2_y, PADDLE_W, PADDLE_H) do
+        ball_dx = 0 - ball_dx
+        ball_x = p2_x - ball_size
+    done
+
+    # Score when ball goes off screen
+    if ball_x < 0 do
+        score2 = score2 + 1
+        ball_x = WIDTH / 2
+        ball_y = HEIGHT / 2
+        ball_dx = 5
+        ball_dy = 3
+    done
+    if ball_x > WIDTH do
+        score1 = score1 + 1
+        ball_x = WIDTH / 2
+        ball_y = HEIGHT / 2
+        ball_dx = 0 - 5
+        ball_dy = 3
+    done
+
+    # Draw
+    game.begin_drawing()
+    game.clear(game.BLACK)
+
+    # Center line
+    let i = 0
+    while i < HEIGHT do
+        game.draw_rect(WIDTH / 2 - 1, i, 2, 20, game.GRAY)
+        i = i + 40
+    done
+
+    # Paddles
+    game.draw_rect(p1_x, p1_y, PADDLE_W, PADDLE_H, game.WHITE)
+    game.draw_rect(p2_x, p2_y, PADDLE_W, PADDLE_H, game.WHITE)
+
+    # Ball
+    game.draw_rect(ball_x, ball_y, ball_size, ball_size, game.WHITE)
+
+    # Scores
+    game.draw_text(str(score1), WIDTH / 4, 20, 40, game.WHITE)
+    game.draw_text(str(score2), 3 * WIDTH / 4, 20, 40, game.WHITE)
+
+    # Instructions
+    game.draw_text("P1: W/S    P2: Up/Down    ESC: Quit", 220, HEIGHT - 30, 16, game.GRAY)
+
+    game.end_drawing()
+done
+
+game.close()

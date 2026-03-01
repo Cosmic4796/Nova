@@ -1,0 +1,28 @@
+import "game"
+
+game.init(800, 600, "Hello Nova Game!")
+game.set_fps(60)
+
+let x = 400
+let y = 300
+
+while game.is_running() do
+    if game.key_down("left") do x = x - 4 done
+    if game.key_down("right") do x = x + 4 done
+    if game.key_down("up") do y = y - 4 done
+    if game.key_down("down") do y = y + 4 done
+
+    game.begin_drawing()
+    game.clear(game.BLACK)
+
+    game.draw_rect(50, 50, 200, 100, game.BLUE)
+    game.draw_rect_lines(300, 50, 200, 100, game.YELLOW)
+    game.draw_line(0, 550, 800, 550, game.GRAY)
+    game.draw_circle(x, y, 20, game.RED)
+    game.draw_text("Arrow keys to move!", 10, 10, 20, game.WHITE)
+    game.draw_text("FPS: " + str(game.get_fps()), 10, 40, 16, game.GREEN)
+
+    game.end_drawing()
+done
+
+game.close()

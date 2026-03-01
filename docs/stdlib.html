@@ -24,7 +24,7 @@
 
     <div class="page">
         <h1 class="page-title">Standard Library</h1>
-        <p class="page-subtitle">Nova ships with twelve built-in modules. Import them with <code>import "module_name"</code>.</p>
+        <p class="page-subtitle">Nova ships with thirteen built-in modules. Import them with <code>import "module_name"</code>.</p>
 
         <div class="toc">
             <div class="toc-title">Modules</div>
@@ -41,6 +41,7 @@
                 <li><a href="#csv">csv</a> &mdash; CSV parsing and generation</li>
                 <li><a href="#regex">regex</a> &mdash; regular expressions</li>
                 <li><a href="#http">http</a> &mdash; HTTP requests (optional, requires libcurl)</li>
+                <li><a href="#game">game</a> &mdash; game development with raylib (optional, requires raylib)</li>
                 <li><a href="#builtins">Built-in Functions</a> &mdash; always available</li>
             </ul>
         </div>
@@ -659,6 +660,339 @@ io.<span class="fn">write_file</span>(<span class="st">"out.json"</span>, text)<
 <pre><code>http.<span class="fn">download</span>(<span class="st">"https://example.com/file.zip"</span>, <span class="st">"file.zip"</span>)
 <span class="bi">print</span>(<span class="st">"Downloaded!"</span>)</code></pre>
         </div>
+
+        <!-- ==================== GAME ==================== -->
+        <div class="mod-header" id="game">
+            <h2>game</h2>
+            <span class="mod-badge">import "game"</span>
+        </div>
+        <p>Game development module powered by raylib. Create windows, draw 2D/3D shapes, handle input, load textures, models, and audio. <strong>Optional</strong> &mdash; only available when Nova is built with raylib (<code>brew install raylib</code>).</p>
+
+        <h3>Window &amp; Lifecycle</h3>
+
+        <div class="func">
+            <div class="func-sig">game.init(width, height, title) -> none</div>
+            <div class="func-desc">Creates a game window with the given dimensions and title.</div>
+<pre><code>game.<span class="fn">init</span>(<span class="nu">800</span>, <span class="nu">600</span>, <span class="st">"My Game"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.close() -> none</div>
+            <div class="func-desc">Closes the window and cleans up resources.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.is_running() -> bool</div>
+            <div class="func-desc">Returns <code>true</code> while the window is open (user hasn't closed it or pressed Escape).</div>
+<pre><code><span class="kw">while</span> game.<span class="fn">is_running</span>() <span class="kw">do</span>
+    <span class="cm"># game loop</span>
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.set_fps(fps) -> none</div>
+            <div class="func-desc">Sets the target frames per second.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.get_fps() -> int</div>
+            <div class="func-desc">Returns the current FPS.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.delta_time() -> float</div>
+            <div class="func-desc">Returns seconds elapsed since the last frame.</div>
+        </div>
+
+        <h3>Drawing</h3>
+
+        <div class="func">
+            <div class="func-sig">game.begin_drawing() -> none</div>
+            <div class="func-desc">Begins a drawing frame. Call before any draw functions.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.end_drawing() -> none</div>
+            <div class="func-desc">Ends the drawing frame and swaps buffers.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.clear(color) -> none</div>
+            <div class="func-desc">Clears the screen with the given color.</div>
+<pre><code>game.<span class="fn">clear</span>(game.BLACK)</code></pre>
+        </div>
+
+        <h3>Shapes</h3>
+
+        <div class="func">
+            <div class="func-sig">game.draw_rect(x, y, w, h, color) -> none</div>
+            <div class="func-desc">Draws a filled rectangle.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_rect_lines(x, y, w, h, color) -> none</div>
+            <div class="func-desc">Draws a rectangle outline.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_circle(x, y, radius, color) -> none</div>
+            <div class="func-desc">Draws a filled circle.</div>
+<pre><code>game.<span class="fn">draw_circle</span>(<span class="nu">400</span>, <span class="nu">300</span>, <span class="nu">20</span>, game.RED)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_line(x1, y1, x2, y2, color) -> none</div>
+            <div class="func-desc">Draws a line between two points.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_triangle(x1, y1, x2, y2, x3, y3, color) -> none</div>
+            <div class="func-desc">Draws a filled triangle.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_text(text, x, y, size, color) -> none</div>
+            <div class="func-desc">Draws a text string at the given position and font size.</div>
+<pre><code>game.<span class="fn">draw_text</span>(<span class="st">"Hello!"</span>, <span class="nu">10</span>, <span class="nu">10</span>, <span class="nu">20</span>, game.WHITE)</code></pre>
+        </div>
+
+        <h3>Input &mdash; Keyboard</h3>
+
+        <div class="func">
+            <div class="func-sig">game.key_pressed(key) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>key</code> was just pressed this frame. Keys are strings: <code>"space"</code>, <code>"enter"</code>, <code>"escape"</code>, <code>"up"</code>, <code>"down"</code>, <code>"left"</code>, <code>"right"</code>, <code>"a"</code>-<code>"z"</code>, <code>"0"</code>-<code>"9"</code>.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.key_down(key) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>key</code> is currently held down.</div>
+<pre><code><span class="kw">if</span> game.<span class="fn">key_down</span>(<span class="st">"right"</span>) <span class="kw">do</span> x <span class="op">=</span> x <span class="op">+</span> <span class="nu">4</span> <span class="kw">done</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.key_released(key) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>key</code> was just released this frame.</div>
+        </div>
+
+        <h3>Input &mdash; Mouse</h3>
+
+        <div class="func">
+            <div class="func-sig">game.mouse_x() -> int</div>
+            <div class="func-desc">Returns the current mouse X position.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.mouse_y() -> int</div>
+            <div class="func-desc">Returns the current mouse Y position.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.mouse_pressed(button) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if mouse button was just pressed (0 = left, 1 = right).</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.mouse_down(button) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if mouse button is currently held.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.mouse_released(button) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if mouse button was just released.</div>
+        </div>
+
+        <h3>Textures</h3>
+
+        <div class="func">
+            <div class="func-sig">game.load_image(path) -> int</div>
+            <div class="func-desc">Loads a texture from a file. Returns an integer handle.</div>
+<pre><code><span class="kw">let</span> sprite <span class="op">=</span> game.<span class="fn">load_image</span>(<span class="st">"player.png"</span>)
+game.<span class="fn">draw_image</span>(sprite, <span class="nu">100</span>, <span class="nu">200</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_image(handle, x, y) -> none</div>
+            <div class="func-desc">Draws a loaded texture at the given position.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_image_scaled(handle, x, y, scale) -> none</div>
+            <div class="func-desc">Draws a loaded texture scaled by the given factor.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.unload_image(handle) -> none</div>
+            <div class="func-desc">Frees a loaded texture.</div>
+        </div>
+
+        <h3>Audio</h3>
+
+        <div class="func">
+            <div class="func-sig">game.init_audio() -> none</div>
+            <div class="func-desc">Initializes the audio device. Call before loading sounds or music.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.load_sound(path) -> int</div>
+            <div class="func-desc">Loads a sound file. Returns an integer handle.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.play_sound(handle) -> none</div>
+            <div class="func-desc">Plays a loaded sound.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.load_music(path) -> int</div>
+            <div class="func-desc">Loads a music stream. Returns an integer handle.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.play_music(handle) -> none</div>
+            <div class="func-desc">Starts playing a loaded music stream.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.update_music(handle) -> none</div>
+            <div class="func-desc">Updates a music stream buffer. Call each frame for music that is playing.</div>
+        </div>
+
+        <h3>Collision Detection</h3>
+
+        <div class="func">
+            <div class="func-sig">game.check_collision_rects(x1, y1, w1, h1, x2, y2, w2, h2) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if two rectangles overlap.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.check_collision_circles(x1, y1, r1, x2, y2, r2) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if two circles overlap.</div>
+        </div>
+
+        <h3>3D &mdash; Vectors &amp; Camera</h3>
+
+        <div class="func">
+            <div class="func-sig">game.vec3(x, y, z) -> dict</div>
+            <div class="func-desc">Creates a 3D vector dict <code>{x, y, z}</code>.</div>
+<pre><code><span class="kw">let</span> pos <span class="op">=</span> game.<span class="fn">vec3</span>(<span class="nu">0</span>, <span class="nu">1</span>, <span class="nu">0</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.camera(px, py, pz, tx, ty, tz, fovy) -> dict</div>
+            <div class="func-desc">Creates a camera dict. Position <code>(px,py,pz)</code>, target <code>(tx,ty,tz)</code>, field of view <code>fovy</code>. Up defaults to <code>(0,1,0)</code>, projection defaults to perspective.</div>
+<pre><code><span class="kw">let</span> cam <span class="op">=</span> game.<span class="fn">camera</span>(<span class="nu">10</span>, <span class="nu">10</span>, <span class="nu">10</span>, <span class="nu">0</span>, <span class="nu">0</span>, <span class="nu">0</span>, <span class="nu">45</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.begin_3d(cam) -> none</div>
+            <div class="func-desc">Begins 3D mode using the given camera dict. Call between <code>begin_drawing()</code> and <code>end_drawing()</code>.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.end_3d() -> none</div>
+            <div class="func-desc">Ends 3D mode and returns to 2D drawing.</div>
+        </div>
+
+        <h3>3D Shapes</h3>
+
+        <div class="func">
+            <div class="func-sig">game.draw_cube(pos, w, h, l, color) -> none</div>
+            <div class="func-desc">Draws a filled cube at <code>pos</code> (vec3) with width, height, and length.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_cube_wires(pos, w, h, l, color) -> none</div>
+            <div class="func-desc">Draws a cube wireframe.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_sphere(pos, radius, color) -> none</div>
+            <div class="func-desc">Draws a filled sphere at <code>pos</code> (vec3).</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_sphere_wires(pos, radius, rings, slices, color) -> none</div>
+            <div class="func-desc">Draws a sphere wireframe with the given ring and slice counts.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_cylinder(pos, rtop, rbottom, height, slices, color) -> none</div>
+            <div class="func-desc">Draws a cylinder or cone. Set <code>rtop</code> or <code>rbottom</code> to 0 for a cone.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_cylinder_wires(pos, rtop, rbottom, height, slices, color) -> none</div>
+            <div class="func-desc">Draws a cylinder wireframe.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_plane(pos, w, h, color) -> none</div>
+            <div class="func-desc">Draws a ground plane on the XZ axis at <code>pos</code> (vec3).</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_grid(slices, spacing) -> none</div>
+            <div class="func-desc">Draws a reference grid centered at the origin.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_line_3d(start, end, color) -> none</div>
+            <div class="func-desc">Draws a line between two vec3 points in 3D space.</div>
+        </div>
+
+        <h3>3D Models</h3>
+
+        <div class="func">
+            <div class="func-sig">game.load_model(path) -> int</div>
+            <div class="func-desc">Loads a 3D model file (.obj, .gltf, etc.). Returns an integer handle.</div>
+<pre><code><span class="kw">let</span> m <span class="op">=</span> game.<span class="fn">load_model</span>(<span class="st">"castle.obj"</span>)
+game.<span class="fn">draw_model</span>(m, game.<span class="fn">vec3</span>(<span class="nu">0</span>, <span class="nu">0</span>, <span class="nu">0</span>), <span class="nu">1.0</span>, game.WHITE)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.unload_model(handle) -> none</div>
+            <div class="func-desc">Frees a loaded model.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_model(handle, pos, scale, color) -> none</div>
+            <div class="func-desc">Draws a model at <code>pos</code> (vec3) with uniform scale and tint color.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.draw_model_ex(handle, pos, rot_axis, rot_angle, scale, color) -> none</div>
+            <div class="func-desc">Draws a model with axis-angle rotation and per-axis scale (vec3).</div>
+        </div>
+
+        <h3>3D Collision Detection</h3>
+
+        <div class="func">
+            <div class="func-sig">game.check_collision_spheres_3d(c1, r1, c2, r2) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if two spheres overlap. <code>c1</code>, <code>c2</code> are vec3 center dicts.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.check_collision_boxes_3d(min1, max1, min2, max2) -> bool</div>
+            <div class="func-desc">AABB collision check. <code>min</code>/<code>max</code> are vec3 corner dicts.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">game.check_collision_box_sphere(bmin, bmax, center, radius) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if a box and sphere overlap.</div>
+        </div>
+
+        <h3>Colors</h3>
+
+        <div class="func">
+            <div class="func-sig">game.color(r, g, b, a?) -> dict</div>
+            <div class="func-desc">Creates a color dict. Alpha defaults to 255 if omitted.</div>
+<pre><code><span class="kw">let</span> teal <span class="op">=</span> game.<span class="fn">color</span>(<span class="nu">0</span>, <span class="nu">128</span>, <span class="nu">128</span>)
+<span class="kw">let</span> semi <span class="op">=</span> game.<span class="fn">color</span>(<span class="nu">255</span>, <span class="nu">0</span>, <span class="nu">0</span>, <span class="nu">128</span>)  <span class="cm"># 50% transparent red</span></code></pre>
+        </div>
+
+        <p>Pre-defined color constants: <code>game.BLACK</code>, <code>game.WHITE</code>, <code>game.RED</code>, <code>game.GREEN</code>, <code>game.BLUE</code>, <code>game.YELLOW</code>, <code>game.ORANGE</code>, <code>game.PINK</code>, <code>game.PURPLE</code>, <code>game.SKYBLUE</code>, <code>game.BROWN</code>, <code>game.GRAY</code>.</p>
+
+        <p>Camera constants: <code>game.CAMERA_PERSPECTIVE</code> (0), <code>game.CAMERA_FREE</code> (1), <code>game.CAMERA_ORBITAL</code> (2), <code>game.CAMERA_FIRST_PERSON</code> (3), <code>game.CAMERA_THIRD_PERSON</code> (4).</p>
 
         <!-- ==================== BUILTINS ==================== -->
         <div class="mod-header" id="builtins">

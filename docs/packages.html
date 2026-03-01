@@ -37,6 +37,7 @@
                 <li><a href="#publishing">Publishing to GitHub</a></li>
                 <li><a href="#structure">Package Directory Structure</a></li>
                 <li><a href="#testing">Testing Your Package</a></li>
+                <li><a href="#native">Native Packages (C)</a></li>
             </ul>
         </div>
 
@@ -167,6 +168,16 @@ cd nova-mylib</code></pre>
             <div class="func-desc">The license under which the package is distributed (e.g. <code>"MIT"</code>, <code>"Apache-2.0"</code>).</div>
         </div>
 
+        <div class="func">
+            <div class="func-sig">"build" (optional)</div>
+            <div class="func-desc">A shell command to run after the package is cloned. Used by <strong>native packages</strong> that contain C code and need to be compiled. The command runs inside the package directory.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">"dependencies" (optional)</div>
+            <div class="func-desc">A dictionary of <code>"name": "git-url"</code> pairs. Transitive dependencies are installed automatically.</div>
+        </div>
+
         <h3>Full Example</h3>
 <pre><code>{
     <span class="st">"name"</span>: <span class="st">"nova-http"</span>,
@@ -256,6 +267,48 @@ git push origin v1.0.0</code></pre>
 
         <div class="note">
             <p><strong>CI Integration:</strong> Since <code>nova test</code> returns a non-zero exit code on failure, it integrates seamlessly with CI/CD systems like GitHub Actions.</p>
+        </div>
+
+        <!-- Native -->
+        <h2 id="native">Native Packages (C)</h2>
+        <p>Nova packages can contain compiled C code in addition to <code>.nova</code> source files. This lets packages wrap C libraries (like raylib, SQLite, etc.) and expose them to Nova scripts.</p>
+
+        <p>A native package uses the <code>"build"</code> field in <code>nova.json</code> to compile its C code after installation. The build command should produce a shared library (<code>.dylib</code> on macOS, <code>.so</code> on Linux) in the package root directory.</p>
+
+        <h3>Example: nova.json for a Native Package</h3>
+<pre><code>{
+    <span class="st">"name"</span>: <span class="st">"nova-game"</span>,
+    <span class="st">"version"</span>: <span class="st">"1.0.0"</span>,
+    <span class="st">"description"</span>: <span class="st">"2D/3D game development with raylib"</span>,
+    <span class="st">"build"</span>: <span class="st">"cmake -B build && cmake --build build && cp build/game.dylib ."</span>,
+    <span class="st">"author"</span>: <span class="st">"Cosmic"</span>,
+    <span class="st">"license"</span>: <span class="st">"MIT"</span>
+}</code></pre>
+
+        <p>When a user runs <code>nova install</code>, Nova will:</p>
+        <ol>
+            <li>Clone the repository into <code>nova_packages/</code></li>
+            <li>Detect the <code>"build"</code> field and run the command</li>
+            <li>The compiled <code>.dylib</code>/<code>.so</code> is loaded automatically when the package is imported</li>
+        </ol>
+
+        <h3>Writing a Native Package</h3>
+        <p>Your C code must export a single function called <code>nova_module_init</code>:</p>
+<pre><code><span class="cm">// game.c</span>
+<span class="cp">#include "nova.h"</span>
+
+<span class="kw">static</span> NovaValue my_function(Interpreter *interp, <span class="kw">int</span> argc,
+                             NovaValue *argv, <span class="kw">int</span> line) {
+    <span class="kw">return</span> NOVA_INT(<span class="nu">42</span>);
+}
+
+<span class="kw">void</span> nova_module_init(Interpreter *interp, Environment *env) {
+    nova_env_define(env, <span class="st">"my_function"</span>,
+        NOVA_OBJ(nova_builtin_new(<span class="st">"my_function"</span>, my_function, <span class="nu">0</span>)));
+}</code></pre>
+
+        <div class="note">
+            <p><strong>Requirements:</strong> Users installing native packages must have the necessary build tools (CMake, a C compiler) and any system libraries the package depends on. Document these in your README.</p>
         </div>
 
         <div class="note">

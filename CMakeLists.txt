@@ -95,6 +95,15 @@ if(CURL_FOUND)
     target_include_directories(nova_http PRIVATE ${CURL_INCLUDE_DIRS})
 endif()
 
+# Optional: Game module (requires raylib)
+find_package(raylib QUIET)
+if(raylib_FOUND)
+    nova_stdlib_module(game raylib)
+    message(STATUS "Building game module with raylib")
+else()
+    message(STATUS "raylib not found — skipping game module (brew install raylib)")
+endif()
+
 # Copy examples to build dir
 file(GLOB NOVA_EXAMPLES "examples/*.nova")
 file(COPY ${NOVA_EXAMPLES} DESTINATION "${CMAKE_BINARY_DIR}/examples")

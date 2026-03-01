@@ -464,10 +464,40 @@ static void install_package(const char *url) {
     }
     printf(C_GREEN "Installed '%s' to nova_packages/%s" C_RESET "\n", name, name);
 
-    /* Check for transitive dependencies in the package's nova.json */
+    /* Check for nova.json */
     char json_path[1024];
     snprintf(json_path, sizeof(json_path), "%s/nova.json", pkg_dir);
     char *src = read_file_source(json_path);
+
+    /* Run build step if "build" field exists in nova.json */
+    if (src) {
+        char *build = strstr(src, "\"build\"");
+        if (build) {
+            char *v1 = strchr(build + 7, '"');
+            if (v1) {
+                v1++;
+                char *v2 = strchr(v1, '"');
+                if (v2) {
+                    size_t build_len = v2 - v1;
+                    char build_cmd[2048];
+                    if (build_len < sizeof(build_cmd) - 256) {
+                        printf(C_CYAN "Running build step..." C_RESET "\n");
+                        snprintf(build_cmd, sizeof(build_cmd), "cd '%s' && %.*s 2>&1",
+                                 pkg_dir, (int)build_len, v1);
+                        int build_ret = system(build_cmd);
+                        if (build_ret != 0) {
+                            fprintf(stderr, C_RED "Build step failed for '%s'" C_RESET "\n", name);
+                            free(src);
+                            return;
+                        }
+                        printf(C_GREEN "Build completed for '%s'" C_RESET "\n", name);
+                    }
+                }
+            }
+        }
+    }
+
+    /* Check for transitive dependencies */
     if (src) {
         /* Look for "dependencies": { "name": "url", ... } */
         char *deps = strstr(src, "\"dependencies\"");

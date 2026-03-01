@@ -303,6 +303,22 @@ void nova_module_load(ModuleLoader *loader, Interpreter *interp,
         snprintf(pkg_dir, sizeof(pkg_dir), "%s/nova_packages/%s", roots[r], module_name);
         if (!dir_exists(pkg_dir)) continue;
 
+        /* Try native C module in package directory */
+        {
+            char path[1024];
+            snprintf(path, sizeof(path), "%s/%s.%s", pkg_dir, module_name,
+#ifdef __APPLE__
+                     "dylib"
+#else
+                     "so"
+#endif
+            );
+            if (load_c_module(loader, interp, module_name, path, line)) {
+                pop_loading(loader);
+                return;
+            }
+        }
+
         /* Try nova.json "main" entry point first */
         char *pkg_main = read_pkg_main(pkg_dir);
         if (pkg_main) {
