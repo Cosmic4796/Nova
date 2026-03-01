@@ -1,0 +1,32 @@
+# Lists in Nova
+
+let fruits = ["apple", "banana", "cherry"]
+print("Fruits: " + str(fruits))
+print("First fruit: " + fruits[0])
+print("Length: " + str(len(fruits)))
+
+# Push and pop
+fruits.push("date")
+print("After push: " + str(fruits))
+
+let last = fruits.pop()
+print("Popped: " + last)
+print("After pop: " + str(fruits))
+
+# Iteration
+print("All fruits:")
+for fruit in fruits do
+    print("  - " + fruit)
+done
+
+# Numeric lists
+let nums = [10, 20, 30, 40, 50]
+let total = 0
+for n in nums do
+    total = total + n
+done
+print("Sum: " + str(total))
+
+# Index assignment
+nums[0] = 99
+print("After update: " + str(nums))

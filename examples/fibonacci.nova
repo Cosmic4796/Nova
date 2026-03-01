@@ -1,0 +1,11 @@
+# Fibonacci sequence in Nova
+func fib(n) do
+    if n <= 1 do
+        return n
+    done
+    return fib(n - 1) + fib(n - 2)
+done
+
+for i in range(15) do
+    print("fib(" + str(i) + ") = " + str(fib(i)))
+done

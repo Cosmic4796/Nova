@@ -1,0 +1,22 @@
+# Guessing Game — Guess the random number!
+import "random"
+
+let secret = random.randint(1, 100)
+let attempts = 0
+
+print("I'm thinking of a number between 1 and 100.")
+
+while true do
+    let guess_str = input("Your guess: ")
+    let guess = int(guess_str)
+    attempts = attempts + 1
+
+    if guess < secret do
+        print("Too low! Try again.")
+    else if guess > secret do
+        print("Too high! Try again.")
+    else do
+        print("Correct! You got it in {attempts} attempts!")
+        break
+    done
+done

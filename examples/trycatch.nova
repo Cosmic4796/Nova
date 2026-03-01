@@ -1,0 +1,39 @@
+# Try/Catch in Nova
+
+# Catch a division by zero
+try do
+    let result = 10 / 0
+    print("This won't print")
+catch err do
+    print("Caught error: " + err)
+done
+
+# Catch an undefined variable
+try do
+    print(undefined_var)
+catch err do
+    print("Caught error: " + err)
+done
+
+# Successful try block (no error)
+try do
+    let x = 42
+    print("x = " + str(x))
+catch err do
+    print("This won't print")
+done
+
+# Nested try/catch
+try do
+    try do
+        let items = []
+        let val = items.pop()
+    catch inner_err do
+        print("Inner catch: " + inner_err)
+    done
+    print("Outer try continues")
+catch outer_err do
+    print("This won't print")
+done
+
+print("Program continues normally")

@@ -1,0 +1,15 @@
+# Pipe operator examples
+
+# Basic pipe: value |> function
+[1, 2, 3, 4, 5] |> len |> print
+
+# Pipe into a function call with extra args
+import "string"
+"hello world" |> string.to_upper() |> print
+"  spacey  " |> string.trim() |> print
+
+# Chain pipes for a pipeline
+import "math"
+-42 |> math.abs() |> math.sqrt() |> print
+
+print("\nPipe examples done!")

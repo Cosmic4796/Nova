@@ -1,0 +1,41 @@
+# Classes and inheritance in Nova
+
+class Animal do
+    func init(name, sound) do
+        self.name = name
+        self.sound = sound
+    done
+
+    func speak() do
+        print(self.name + " says " + self.sound)
+    done
+
+    func describe() do
+        print("I am " + self.name)
+    done
+done
+
+class Dog(Animal) do
+    func fetch(item) do
+        print(self.name + " fetches the " + item)
+    done
+done
+
+class Cat(Animal) do
+    func purr() do
+        print(self.name + " purrs...")
+    done
+done
+
+# Create instances
+let dog = Dog("Rex", "Woof!")
+let cat = Cat("Whiskers", "Meow!")
+
+# Call methods
+dog.speak()
+dog.fetch("ball")
+dog.describe()
+
+cat.speak()
+cat.purr()
+cat.describe()

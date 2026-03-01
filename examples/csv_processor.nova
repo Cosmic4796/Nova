@@ -1,0 +1,47 @@
+# CSV Processor — Read, process, and write CSV data
+import "csv"
+import "collections"
+
+# Create sample CSV data
+let sample = "name,age,city\nAlice,30,New York\nBob,25,London\nCharlie,35,Paris\nDiana,28,Tokyo\n"
+
+print("=== CSV Processor ===\n")
+print("Input CSV:")
+print(sample)
+
+# Parse the CSV
+let rows = csv.parse(sample)
+let header = rows[0]
+
+print("Parsed {len(rows)} rows (including header)\n")
+
+# Print each row nicely
+print("Table view:")
+for i in range(1, len(rows)) do
+    let row = rows[i]
+    print("  {row[0]} is {row[1]} years old, lives in {row[2]}")
+done
+
+# Sort rows by name (skip header) using collections
+let data_rows = []
+for i in range(1, len(rows)) do
+    append(data_rows, rows[i])
+done
+
+let sorted = collections.sort_by(data_rows, (row) => row[0])
+print("\nSorted by name:")
+for row in sorted do
+    print("  {row[0]}, {row[1]}, {row[2]}")
+done
+
+# Build new CSV with an extra column
+let output_rows = [["name", "age", "city", "senior"]]
+for i in range(1, len(rows)) do
+    let row = rows[i]
+    let senior = "yes" if int(row[1]) >= 30 else "no"
+    append(output_rows, [row[0], row[1], row[2], senior])
+done
+
+let output_csv = csv.dump(output_rows)
+print("\nOutput CSV (with 'senior' column):")
+print(output_csv)

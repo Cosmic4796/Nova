@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova - A Modern, Elegant Programming Language</title>
+    <meta name="description" content="Nova is a dynamically-typed, modern programming language implemented in C. Easy to learn, batteries included, and extensible.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-mark">N</span>
+                Nova
+            </a>
+            <ul class="nav-links">
+                <li><a href="getting-started.html">Guide</a></li>
+                <li><a href="stdlib.html">Standard Library</a></li>
+                <li><a href="packages.html">Packages</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page">
+        <h1 class="page-title">Nova Programming Language</h1>
+        <p class="page-subtitle">A modern, dynamically-typed language built for clarity and simplicity. Implemented in C, batteries included.</p>
+
+        <div class="install-box">git clone &lt;repo-url&gt; && cd nova && cmake -B build && cmake --build build</div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Easy to Learn</h3>
+                <p>Clean syntax with only 22 keywords. No semicolons, no braces &mdash; just <code>do</code> and <code>done</code>. If you can read English, you can read Nova.</p>
+            </div>
+            <div class="card">
+                <h3>Batteries Included</h3>
+                <p>Ships with 12 standard library modules covering math, file I/O, strings, JSON, OS, random, collections, paths, datetime, CSV, regex, and HTTP.</p>
+            </div>
+            <div class="card">
+                <h3>Extensible</h3>
+                <p>Import modules, load C shared libraries, or install community packages from GitHub. Nova grows with your needs.</p>
+            </div>
+            <div class="card">
+                <h3>Fast</h3>
+                <p>Implemented in C for speed. Nova's lightweight runtime starts instantly and runs your programs without unnecessary overhead.</p>
+            </div>
+        </div>
+
+        <h2>A Quick Look</h2>
+
+<pre><code><span class="cm"># Define a greeter class</span>
+<span class="kw">class</span> <span class="cl">Greeter</span> <span class="kw">do</span>
+    <span class="kw">func</span> <span class="fn">init</span>(name) <span class="kw">do</span>
+        <span class="se">self</span>.name <span class="op">=</span> name
+    <span class="kw">done</span>
+
+    <span class="kw">func</span> <span class="fn">hello</span>() <span class="kw">do</span>
+        <span class="kw">return</span> <span class="st">"Hello, {self.name}!"</span>
+    <span class="kw">done</span>
+<span class="kw">done</span>
+
+<span class="kw">let</span> greeter <span class="op">=</span> <span class="cl">Greeter</span>(<span class="st">"World"</span>)
+<span class="bi">print</span>(greeter.<span class="fn">hello</span>())</code></pre>
+
+<pre><code><span class="cm"># Error handling with try/catch</span>
+<span class="kw">import</span> <span class="st">"io"</span>
+<span class="kw">import</span> <span class="st">"json"</span>
+
+<span class="kw">try</span> <span class="kw">do</span>
+    <span class="kw">let</span> data <span class="op">=</span> io.<span class="fn">read_file</span>(<span class="st">"config.json"</span>)
+    <span class="kw">let</span> config <span class="op">=</span> json.<span class="fn">parse</span>(data)
+    <span class="bi">print</span>(<span class="st">"Loaded {len(config)} settings"</span>)
+<span class="kw">catch</span> err <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Could not load config: {err}"</span>)
+<span class="kw">done</span></code></pre>
+
+        <h2>Get Started</h2>
+        <p>Read the <a href="getting-started.html">Getting Started guide</a> to learn Nova from scratch, explore the <a href="stdlib.html">Standard Library</a> reference, or learn about the <a href="packages.html">Package System</a> for community extensions.</p>
+
+        <div class="footer">
+            Built with love for the Nova community.
+        </div>
+    </div>
+</body>
+</html>

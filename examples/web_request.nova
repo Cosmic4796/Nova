@@ -1,0 +1,25 @@
+# Web Request — Fetch data from a public API
+# Requires the http module (built with libcurl)
+import "http"
+import "json"
+import "string"
+
+print("Fetching data from httpbin.org...")
+
+try do
+    let response = http.get("https://httpbin.org/json")
+    let status = response["status"]
+
+    if status == 200 do
+        let data = json.parse(response["body"])
+        print("Status: {status}")
+        print("Response received successfully!")
+        let preview = string.substr(response["body"], 0, 200)
+        print("Body preview: {preview}")
+    else do
+        print("Request failed with status: {status}")
+    done
+catch err do
+    print("HTTP error: {err}")
+    print("(Make sure Nova was built with libcurl support)")
+done

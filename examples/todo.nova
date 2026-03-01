@@ -1,0 +1,80 @@
+# Terminal TODO App — Persistent tasks with JSON storage
+import "io"
+import "json"
+import "string"
+
+let TODO_FILE = "todos.json"
+
+func load_todos() do
+    if io.file_exists(TODO_FILE) do
+        let data = io.read_file(TODO_FILE)
+        return json.parse(data)
+    done
+    return []
+done
+
+func save_todos(todos) do
+    io.write_file(TODO_FILE, json.dump(todos))
+done
+
+func show_todos(todos) do
+    if len(todos) == 0 do
+        print("No tasks yet. Add one with 'add <task>'")
+        return none
+    done
+    print("\nYour TODO list:")
+    for i in range(0, len(todos)) do
+        let status = "[x]" if todos[i]["done"] else "[ ]"
+        let text = todos[i]["text"]
+        print("  {i + 1}. {status} {text}")
+    done
+    print("")
+done
+
+let todos = load_todos()
+print("TODO App — Commands: add <task>, done <n>, remove <n>, list, quit")
+
+while true do
+    let cmd = input("> ")
+
+    if cmd == "quit" or cmd == "exit" do
+        save_todos(todos)
+        print("Saved. Goodbye!")
+        break
+    else if cmd == "list" do
+        show_todos(todos)
+    else if string.starts_with(cmd, "add ") do
+        let task = string.substr(cmd, 4, len(cmd) - 4)
+        append(todos, {"text": task, "done": false})
+        save_todos(todos)
+        print("Added: {task}")
+    else if string.starts_with(cmd, "done ") do
+        let idx = int(string.substr(cmd, 5, len(cmd) - 5)) - 1
+        if idx >= 0 and idx < len(todos) do
+            todos[idx]["done"] = true
+            save_todos(todos)
+            let text = todos[idx]["text"]
+            print("Completed: {text}")
+        else do
+            print("Invalid task number")
+        done
+    else if string.starts_with(cmd, "remove ") do
+        let idx = int(string.substr(cmd, 7, len(cmd) - 7)) - 1
+        if idx >= 0 and idx < len(todos) do
+            let removed = todos[idx]["text"]
+            let new_todos = []
+            for i in range(0, len(todos)) do
+                if i != idx do
+                    append(new_todos, todos[i])
+                done
+            done
+            todos = new_todos
+            save_todos(todos)
+            print("Removed: {removed}")
+        else do
+            print("Invalid task number")
+        done
+    else do
+        print("Unknown command. Try: add, done, remove, list, quit")
+    done
+done

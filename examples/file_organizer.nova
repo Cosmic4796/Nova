@@ -1,0 +1,38 @@
+# File Organizer — Sort files into folders by extension
+import "string"
+import "io"
+import "path"
+
+let target_dir = "."
+print("File Organizer — Organizing files in current directory")
+
+let files = io.list_dir(target_dir)
+let moved = 0
+
+for file in files do
+    let filepath = path.join(target_dir, file)
+
+    # Skip directories
+    if path.is_dir(filepath) do
+        continue
+    done
+
+    let ext = path.extension(file)
+    if ext == "" do
+        continue
+    done
+
+    # Remove the leading dot from extension for folder name
+    let folder = string.substr(ext, 1, len(ext) - 1)
+    let folder_path = path.join(target_dir, folder)
+
+    print("  {file} -> {folder}/")
+    moved = moved + 1
+done
+
+if moved == 0 do
+    print("No files to organize.")
+else do
+    print("\nFound {moved} files that could be organized by extension.")
+    print("(Dry run — no files were actually moved)")
+done

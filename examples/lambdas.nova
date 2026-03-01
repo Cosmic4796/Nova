@@ -1,0 +1,29 @@
+# Lambdas in Nova
+
+# Simple lambda
+let add = (a, b) => a + b
+print("3 + 4 = " + str(add(3, 4)))
+
+# Lambda with one parameter
+let double = (x) => x * 2
+print("double(5) = " + str(double(5)))
+
+# No-parameter lambda
+let greet = () => "Hello from lambda!"
+print(greet())
+
+# Lambda in higher-order function
+func apply(fn, x, y) do
+    return fn(x, y)
+done
+
+let mul = (a, b) => a * b
+print("apply(mul, 6, 7) = " + str(apply(mul, 6, 7)))
+
+# Lambda with expressions
+let square = (n) => n * n
+let nums = [1, 2, 3, 4, 5]
+print("Squares:")
+for n in nums do
+    print("  " + str(n) + "^2 = " + str(square(n)))
+done

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Nova Programming Language</title>
+    <meta name="description" content="Learn Nova from scratch. Installation, syntax, variables, functions, classes, and more.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-mark">N</span>
+                Nova
+            </a>
+            <ul class="nav-links">
+                <li><a href="getting-started.html" class="active">Guide</a></li>
+                <li><a href="stdlib.html">Standard Library</a></li>
+                <li><a href="packages.html">Packages</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page">
+        <h1 class="page-title">Getting Started</h1>
+        <p class="page-subtitle">Everything you need to go from zero to productive with Nova.</p>
+
+        <div class="toc">
+            <div class="toc-title">On this page</div>
+            <ul>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#hello-world">Hello World</a></li>
+                <li><a href="#variables">Variables and Types</a></li>
+                <li><a href="#control-flow">Control Flow</a></li>
+                <li><a href="#functions">Functions and Lambdas</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <li><a href="#collections">Working with Collections</a></li>
+                <li><a href="#modules">Modules and Imports</a></li>
+                <li><a href="#error-handling">Error Handling</a></li>
+            </ul>
+        </div>
+
+        <!-- Installation -->
+        <h2 id="installation">Installation</h2>
+        <p>Nova is implemented in C and builds with CMake. You will need a C compiler (gcc or clang) and CMake 3.10 or later.</p>
+
+        <h3>Build from Source</h3>
+<pre><code><span class="cm"># Clone the repository</span>
+git clone &lt;repo-url&gt;
+cd nova
+
+<span class="cm"># Build with CMake</span>
+cmake -B build
+cmake --build build
+
+<span class="cm"># Optionally install system-wide</span>
+sudo cmake --install build</code></pre>
+
+        <h3>Verify Installation</h3>
+<pre><code>nova --version</code></pre>
+        <p>You should see the version number printed. You are ready to write Nova programs.</p>
+
+        <h3>Create a Project</h3>
+        <p>Use <code>nova init</code> to scaffold a new project with a starter file and manifest:</p>
+<pre><code>nova init myapp
+cd myapp
+nova main.nova</code></pre>
+        <p>This creates <code>main.nova</code> (starter program) and <code>nova.json</code> (project manifest).</p>
+
+        <h3>Format Your Code</h3>
+        <p>Nova includes a built-in formatter to keep your code consistent:</p>
+<pre><code><span class="cm"># Format a single file</span>
+nova fmt main.nova
+
+<span class="cm"># Format all .nova files in a directory</span>
+nova fmt src/</code></pre>
+
+        <!-- Hello World -->
+        <h2 id="hello-world">Hello World</h2>
+        <p>Create a file called <code>hello.nova</code> with the following content:</p>
+<pre><code><span class="bi">print</span>(<span class="st">"Hello, World!"</span>)</code></pre>
+        <p>Run it from your terminal:</p>
+<pre><code>nova hello.nova</code></pre>
+        <p>That is it. No boilerplate, no main function, no imports. Nova runs your code top to bottom.</p>
+
+        <div class="note">
+            <p><strong>Tip:</strong> Nova files use the <code>.nova</code> extension by convention.</p>
+        </div>
+
+        <!-- Variables and Types -->
+        <h2 id="variables">Variables and Types</h2>
+        <p>Declare variables with the <code>let</code> keyword. Nova is dynamically typed, so you do not need to specify types.</p>
+
+<pre><code><span class="cm"># Variables</span>
+<span class="kw">let</span> name <span class="op">=</span> <span class="st">"Nova"</span>
+<span class="kw">let</span> version <span class="op">=</span> <span class="nu">1.0</span>
+<span class="kw">let</span> is_awesome <span class="op">=</span> <span class="kw">true</span>
+<span class="kw">let</span> nothing <span class="op">=</span> <span class="kw">none</span></code></pre>
+
+        <h3>Data Types</h3>
+        <p>Nova has the following built-in types:</p>
+        <ul>
+            <li><strong>int</strong> &mdash; whole numbers: <code>42</code>, <code>-7</code>, <code>0</code></li>
+            <li><strong>float</strong> &mdash; decimal numbers: <code>3.14</code>, <code>-0.5</code></li>
+            <li><strong>bool</strong> &mdash; boolean values: <code>true</code>, <code>false</code></li>
+            <li><strong>string</strong> &mdash; text: <code>"hello"</code> or <code>'hello'</code></li>
+            <li><strong>list</strong> &mdash; ordered collection: <code>[1, 2, 3]</code></li>
+            <li><strong>dict</strong> &mdash; key-value map: <code>{"key": "value"}</code></li>
+            <li><strong>none</strong> &mdash; the absence of a value</li>
+            <li><strong>function</strong> &mdash; first-class functions</li>
+            <li><strong>class</strong> &mdash; class definitions</li>
+            <li><strong>instance</strong> &mdash; class instances</li>
+        </ul>
+
+        <h3>Strings</h3>
+        <p>Strings support escape sequences and expression interpolation with curly braces:</p>
+<pre><code><span class="kw">let</span> name <span class="op">=</span> <span class="st">"World"</span>
+<span class="bi">print</span>(<span class="st">"Hello, {name}!"</span>)     <span class="cm"># Hello, World!</span>
+<span class="bi">print</span>(<span class="st">"2 + 2 = {2 + 2}"</span>)    <span class="cm"># 2 + 2 = 4</span>
+
+<span class="cm"># Escape sequences: \n \t \r \\ \' \"</span>
+<span class="bi">print</span>(<span class="st">"Line 1\nLine 2"</span>)</code></pre>
+
+        <h3>Type Checking and Conversion</h3>
+<pre><code><span class="bi">print</span>(<span class="bi">type</span>(<span class="nu">42</span>))        <span class="cm"># int</span>
+<span class="bi">print</span>(<span class="bi">type</span>(<span class="st">"hello"</span>))   <span class="cm"># string</span>
+
+<span class="cm"># Convert between types</span>
+<span class="kw">let</span> n <span class="op">=</span> <span class="bi">int</span>(<span class="st">"42"</span>)      <span class="cm"># string to int</span>
+<span class="kw">let</span> s <span class="op">=</span> <span class="bi">str</span>(<span class="nu">42</span>)        <span class="cm"># int to string</span>
+<span class="kw">let</span> f <span class="op">=</span> <span class="bi">float</span>(<span class="st">"3.14"</span>)  <span class="cm"># string to float</span></code></pre>
+
+        <h3>Truthiness</h3>
+        <p>The following values are considered <strong>falsy</strong>: <code>none</code>, <code>false</code>, <code>0</code>, <code>""</code> (empty string), and <code>[]</code> (empty list). Everything else is <strong>truthy</strong>.</p>
+
+        <!-- Control Flow -->
+        <h2 id="control-flow">Control Flow</h2>
+
+        <h3>If / Else</h3>
+<pre><code><span class="kw">let</span> age <span class="op">=</span> <span class="nu">18</span>
+
+<span class="kw">if</span> age <span class="op">&gt;=</span> <span class="nu">18</span> <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"You can vote!"</span>)
+<span class="kw">else</span> <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Too young to vote."</span>)
+<span class="kw">done</span></code></pre>
+
+        <h3>While Loops</h3>
+<pre><code><span class="kw">let</span> count <span class="op">=</span> <span class="nu">0</span>
+<span class="kw">while</span> count <span class="op">&lt;</span> <span class="nu">5</span> <span class="kw">do</span>
+    <span class="bi">print</span>(count)
+    count <span class="op">=</span> count <span class="op">+</span> <span class="nu">1</span>
+<span class="kw">done</span></code></pre>
+
+        <h3>For-In Loops</h3>
+<pre><code><span class="cm"># Iterate over a list</span>
+<span class="kw">let</span> fruits <span class="op">=</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>]
+<span class="kw">for</span> fruit <span class="kw">in</span> fruits <span class="kw">do</span>
+    <span class="bi">print</span>(fruit)
+<span class="kw">done</span>
+
+<span class="cm"># Iterate over a range</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, <span class="nu">6</span>) <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Count: {i}"</span>)
+<span class="kw">done</span></code></pre>
+
+        <h3>Break and Continue</h3>
+<pre><code><span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, <span class="nu">100</span>) <span class="kw">do</span>
+    <span class="kw">if</span> i <span class="op">%</span> <span class="nu">2</span> <span class="op">==</span> <span class="nu">0</span> <span class="kw">do</span>
+        <span class="kw">continue</span>          <span class="cm"># skip even numbers</span>
+    <span class="kw">done</span>
+    <span class="kw">if</span> i <span class="op">&gt;</span> <span class="nu">10</span> <span class="kw">do</span>
+        <span class="kw">break</span>             <span class="cm"># stop after 10</span>
+    <span class="kw">done</span>
+    <span class="bi">print</span>(i)
+<span class="kw">done</span></code></pre>
+
+        <h3>Logical Operators</h3>
+<pre><code><span class="kw">if</span> age <span class="op">&gt;=</span> <span class="nu">18</span> <span class="kw">and</span> has_id <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Access granted"</span>)
+<span class="kw">done</span>
+
+<span class="kw">if</span> <span class="kw">not</span> is_banned <span class="kw">or</span> is_admin <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Welcome"</span>)
+<span class="kw">done</span></code></pre>
+
+        <!-- Functions -->
+        <h2 id="functions">Functions and Lambdas</h2>
+
+        <h3>Defining Functions</h3>
+<pre><code><span class="kw">func</span> <span class="fn">greet</span>(name) <span class="kw">do</span>
+    <span class="kw">return</span> <span class="st">"Hello, {name}!"</span>
+<span class="kw">done</span>
+
+<span class="bi">print</span>(<span class="fn">greet</span>(<span class="st">"Nova"</span>))  <span class="cm"># Hello, Nova!</span></code></pre>
+
+        <h3>Multiple Parameters</h3>
+<pre><code><span class="kw">func</span> <span class="fn">add</span>(a, b) <span class="kw">do</span>
+    <span class="kw">return</span> a <span class="op">+</span> b
+<span class="kw">done</span>
+
+<span class="bi">print</span>(<span class="fn">add</span>(<span class="nu">3</span>, <span class="nu">4</span>))  <span class="cm"># 7</span></code></pre>
+
+        <h3>First-Class Functions</h3>
+        <p>Functions are values. You can store them in variables and pass them to other functions.</p>
+<pre><code><span class="kw">func</span> <span class="fn">apply</span>(f, value) <span class="kw">do</span>
+    <span class="kw">return</span> <span class="fn">f</span>(value)
+<span class="kw">done</span>
+
+<span class="kw">func</span> <span class="fn">double</span>(x) <span class="kw">do</span>
+    <span class="kw">return</span> x <span class="op">*</span> <span class="nu">2</span>
+<span class="kw">done</span>
+
+<span class="bi">print</span>(<span class="fn">apply</span>(double, <span class="nu">5</span>))  <span class="cm"># 10</span></code></pre>
+
+        <h3>Lambdas (Arrow Functions)</h3>
+<pre><code><span class="kw">let</span> square <span class="op">=</span> (x) <span class="op">=&gt;</span> x <span class="op">*</span> x
+<span class="bi">print</span>(<span class="fn">square</span>(<span class="nu">5</span>))  <span class="cm"># 25</span>
+
+<span class="kw">let</span> add <span class="op">=</span> (a, b) <span class="op">=&gt;</span> a <span class="op">+</span> b
+<span class="bi">print</span>(<span class="fn">add</span>(<span class="nu">3</span>, <span class="nu">4</span>))  <span class="cm"># 7</span></code></pre>
+
+        <h3>Ternary Expressions</h3>
+<pre><code><span class="kw">let</span> label <span class="op">=</span> <span class="st">"even"</span> <span class="kw">if</span> n <span class="op">%</span> <span class="nu">2</span> <span class="op">==</span> <span class="nu">0</span> <span class="kw">else</span> <span class="st">"odd"</span></code></pre>
+
+        <h3>The Pipe Operator</h3>
+        <p>The pipe operator <code>|&gt;</code> passes the result of the left expression as the first argument to the right function:</p>
+<pre><code><span class="kw">let</span> result <span class="op">=</span> <span class="st">"  hello world  "</span>
+    <span class="op">|&gt;</span> string.<span class="fn">trim</span>()
+    <span class="op">|&gt;</span> string.<span class="fn">to_upper</span>()
+
+<span class="bi">print</span>(result)  <span class="cm"># HELLO WORLD</span></code></pre>
+
+        <!-- Classes -->
+        <h2 id="classes">Classes</h2>
+        <p>Nova supports object-oriented programming with classes, constructors, methods, and single inheritance.</p>
+
+        <h3>Defining a Class</h3>
+<pre><code><span class="kw">class</span> <span class="cl">Animal</span> <span class="kw">do</span>
+    <span class="kw">func</span> <span class="fn">init</span>(name, sound) <span class="kw">do</span>
+        <span class="se">self</span>.name <span class="op">=</span> name
+        <span class="se">self</span>.sound <span class="op">=</span> sound
+    <span class="kw">done</span>
+
+    <span class="kw">func</span> <span class="fn">speak</span>() <span class="kw">do</span>
+        <span class="bi">print</span>(<span class="st">"{self.name} says {self.sound}!"</span>)
+    <span class="kw">done</span>
+<span class="kw">done</span>
+
+<span class="kw">let</span> dog <span class="op">=</span> <span class="cl">Animal</span>(<span class="st">"Rex"</span>, <span class="st">"Woof"</span>)
+dog.<span class="fn">speak</span>()  <span class="cm"># Rex says Woof!</span></code></pre>
+
+        <h3>Inheritance</h3>
+<pre><code><span class="kw">class</span> <span class="cl">Dog</span>(<span class="cl">Animal</span>) <span class="kw">do</span>
+    <span class="kw">func</span> <span class="fn">init</span>(name) <span class="kw">do</span>
+        <span class="se">self</span>.name <span class="op">=</span> name
+        <span class="se">self</span>.sound <span class="op">=</span> <span class="st">"Woof"</span>
+    <span class="kw">done</span>
+
+    <span class="kw">func</span> <span class="fn">fetch</span>(item) <span class="kw">do</span>
+        <span class="bi">print</span>(<span class="st">"{self.name} fetches the {item}!"</span>)
+    <span class="kw">done</span>
+<span class="kw">done</span>
+
+<span class="kw">let</span> buddy <span class="op">=</span> <span class="cl">Dog</span>(<span class="st">"Buddy"</span>)
+buddy.<span class="fn">speak</span>()           <span class="cm"># Buddy says Woof!</span>
+buddy.<span class="fn">fetch</span>(<span class="st">"ball"</span>)     <span class="cm"># Buddy fetches the ball!</span></code></pre>
+
+        <div class="note">
+            <p><strong>Note:</strong> Use <code>self</code> to access instance properties and methods. The <code>init</code> method is called automatically when you create a new instance.</p>
+        </div>
+
+        <!-- Collections -->
+        <h2 id="collections">Working with Collections</h2>
+
+        <h3>Lists</h3>
+<pre><code><span class="kw">let</span> fruits <span class="op">=</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>]
+
+<span class="cm"># Access by index</span>
+<span class="bi">print</span>(fruits[<span class="nu">0</span>])         <span class="cm"># apple</span>
+
+<span class="cm"># Length</span>
+<span class="bi">print</span>(<span class="bi">len</span>(fruits))       <span class="cm"># 3</span>
+
+<span class="cm"># Add elements</span>
+<span class="bi">append</span>(fruits, <span class="st">"date"</span>)
+
+<span class="cm"># Iterate</span>
+<span class="kw">for</span> fruit <span class="kw">in</span> fruits <span class="kw">do</span>
+    <span class="bi">print</span>(fruit)
+<span class="kw">done</span></code></pre>
+
+        <h3>Dictionaries</h3>
+<pre><code><span class="kw">let</span> person <span class="op">=</span> {
+    <span class="st">"name"</span>: <span class="st">"Alice"</span>,
+    <span class="st">"age"</span>: <span class="nu">30</span>,
+    <span class="st">"city"</span>: <span class="st">"Wonderland"</span>
+}
+
+<span class="cm"># Access values</span>
+<span class="bi">print</span>(person[<span class="st">"name"</span>])    <span class="cm"># Alice</span>
+
+<span class="cm"># Get all keys and values</span>
+<span class="kw">let</span> k <span class="op">=</span> keys(person)     <span class="cm"># ["name", "age", "city"]</span>
+<span class="kw">let</span> v <span class="op">=</span> values(person)   <span class="cm"># ["Alice", 30, "Wonderland"]</span>
+
+<span class="cm"># Add or update entries</span>
+person[<span class="st">"email"</span>] <span class="op">=</span> <span class="st">"alice@example.com"</span></code></pre>
+
+        <!-- Modules -->
+        <h2 id="modules">Modules and Imports</h2>
+        <p>Use <code>import</code> to load other Nova files or standard library modules.</p>
+
+        <p>Each imported module becomes a namespace — access its functions and constants with dot notation.</p>
+
+        <h3>Standard Library Imports</h3>
+<pre><code><span class="kw">import</span> <span class="st">"math"</span>
+<span class="kw">import</span> <span class="st">"io"</span>
+<span class="kw">import</span> <span class="st">"string"</span>
+
+<span class="bi">print</span>(math.PI)               <span class="cm"># 3.14159...</span>
+<span class="bi">print</span>(math.<span class="fn">sqrt</span>(<span class="nu">16</span>))         <span class="cm"># 4</span>
+<span class="bi">print</span>(string.<span class="fn">to_upper</span>(<span class="st">"hi"</span>)) <span class="cm"># HI</span></code></pre>
+
+        <h3>Importing Your Own Files</h3>
+<pre><code><span class="cm"># utils.nova</span>
+<span class="kw">func</span> <span class="fn">greet</span>(name) <span class="kw">do</span>
+    <span class="kw">return</span> <span class="st">"Hello, {name}!"</span>
+<span class="kw">done</span></code></pre>
+
+<pre><code><span class="cm"># main.nova</span>
+<span class="kw">import</span> <span class="st">"utils"</span>
+
+<span class="bi">print</span>(utils.<span class="fn">greet</span>(<span class="st">"World"</span>))</code></pre>
+
+        <h3>C Shared Libraries</h3>
+        <p>Nova can also load C shared libraries as modules, enabling native extensions for performance-critical code.</p>
+
+        <!-- Error Handling -->
+        <h2 id="error-handling">Error Handling</h2>
+        <p>Use <code>try</code>/<code>catch</code> to handle runtime errors gracefully.</p>
+<pre><code><span class="kw">try</span> <span class="kw">do</span>
+    <span class="kw">let</span> result <span class="op">=</span> <span class="nu">10</span> <span class="op">/</span> <span class="nu">0</span>
+<span class="kw">catch</span> err <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Error: {err}"</span>)
+<span class="kw">done</span></code></pre>
+
+        <p>You can use try/catch with file I/O, network operations, type conversions, and any other code that might fail at runtime:</p>
+<pre><code><span class="kw">import</span> <span class="st">"io"</span>
+<span class="kw">import</span> <span class="st">"json"</span>
+
+<span class="kw">func</span> <span class="fn">load_config</span>(path) <span class="kw">do</span>
+    <span class="kw">try</span> <span class="kw">do</span>
+        <span class="kw">let</span> data <span class="op">=</span> io.<span class="fn">read_file</span>(path)
+        <span class="kw">return</span> json.<span class="fn">parse</span>(data)
+    <span class="kw">catch</span> err <span class="kw">do</span>
+        <span class="bi">print</span>(<span class="st">"Failed to load config: {err}"</span>)
+        <span class="kw">return</span> {}
+    <span class="kw">done</span>
+<span class="kw">done</span>
+
+<span class="kw">let</span> config <span class="op">=</span> <span class="fn">load_config</span>(<span class="st">"settings.json"</span>)</code></pre>
+
+        <div class="note">
+            <p><strong>Next steps:</strong> Explore the <a href="stdlib.html">Standard Library</a> to see all the modules available out of the box, or learn about the <a href="packages.html">Package System</a> to install community packages.</p>
+        </div>
+
+        <div class="footer">
+            Built with love for the Nova community.
+        </div>
+    </div>
+</body>
+</html>

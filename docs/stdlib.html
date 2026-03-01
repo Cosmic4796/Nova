@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standard Library - Nova Programming Language</title>
+    <meta name="description" content="Complete reference for Nova's standard library modules: math, io, string, os, random, json, collections, path, datetime, csv, regex, and http.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-mark">N</span>
+                Nova
+            </a>
+            <ul class="nav-links">
+                <li><a href="getting-started.html">Guide</a></li>
+                <li><a href="stdlib.html" class="active">Standard Library</a></li>
+                <li><a href="packages.html">Packages</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page">
+        <h1 class="page-title">Standard Library</h1>
+        <p class="page-subtitle">Nova ships with twelve built-in modules. Import them with <code>import "module_name"</code>.</p>
+
+        <div class="toc">
+            <div class="toc-title">Modules</div>
+            <ul>
+                <li><a href="#math">math</a> &mdash; mathematical constants and functions</li>
+                <li><a href="#io">io</a> &mdash; file system operations</li>
+                <li><a href="#string">string</a> &mdash; string manipulation</li>
+                <li><a href="#os">os</a> &mdash; operating system interface</li>
+                <li><a href="#random">random</a> &mdash; random number generation</li>
+                <li><a href="#json">json</a> &mdash; JSON parsing and serialization</li>
+                <li><a href="#collections">collections</a> &mdash; list transformation and querying</li>
+                <li><a href="#path">path</a> &mdash; file path manipulation</li>
+                <li><a href="#datetime">datetime</a> &mdash; date and time operations</li>
+                <li><a href="#csv">csv</a> &mdash; CSV parsing and generation</li>
+                <li><a href="#regex">regex</a> &mdash; regular expressions</li>
+                <li><a href="#http">http</a> &mdash; HTTP requests (optional, requires libcurl)</li>
+                <li><a href="#builtins">Built-in Functions</a> &mdash; always available</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <p><strong>Usage:</strong> All standard library functions are accessed through their module namespace. Import the module first, then call functions as <code>module.function()</code>.</p>
+        </div>
+
+        <!-- ==================== MATH ==================== -->
+        <div class="mod-header" id="math">
+            <h2>math</h2>
+            <span class="mod-badge">import "math"</span>
+        </div>
+        <p>Mathematical constants and common functions for numeric computation.</p>
+
+        <h3>Constants</h3>
+
+        <div class="func">
+            <div class="func-sig">math.PI</div>
+            <div class="func-desc">The ratio of a circle's circumference to its diameter. Approximately <code>3.141592653589793</code>.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.E</div>
+            <div class="func-desc">Euler's number, the base of natural logarithms. Approximately <code>2.718281828459045</code>.</div>
+        </div>
+
+        <h3>Functions</h3>
+
+        <div class="func">
+            <div class="func-sig">math.abs(x) -> number</div>
+            <div class="func-desc">Returns the absolute value of <code>x</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">abs</span>(<span class="op">-</span><span class="nu">42</span>))   <span class="cm"># 42</span>
+<span class="bi">print</span>(math.<span class="fn">abs</span>(<span class="nu">3.14</span>))  <span class="cm"># 3.14</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.sqrt(x) -> float</div>
+            <div class="func-desc">Returns the square root of <code>x</code>. Raises an error if <code>x</code> is negative.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">sqrt</span>(<span class="nu">16</span>))   <span class="cm"># 4.0</span>
+<span class="bi">print</span>(math.<span class="fn">sqrt</span>(<span class="nu">2</span>))    <span class="cm"># 1.4142135...</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.floor(x) -> int</div>
+            <div class="func-desc">Returns the largest integer less than or equal to <code>x</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">floor</span>(<span class="nu">3.7</span>))   <span class="cm"># 3</span>
+<span class="bi">print</span>(math.<span class="fn">floor</span>(<span class="op">-</span><span class="nu">2.3</span>))  <span class="cm"># -3</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.ceil(x) -> int</div>
+            <div class="func-desc">Returns the smallest integer greater than or equal to <code>x</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">ceil</span>(<span class="nu">3.2</span>))   <span class="cm"># 4</span>
+<span class="bi">print</span>(math.<span class="fn">ceil</span>(<span class="op">-</span><span class="nu">2.8</span>))  <span class="cm"># -2</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.round(x) -> int</div>
+            <div class="func-desc">Rounds <code>x</code> to the nearest integer.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">round</span>(<span class="nu">3.5</span>))  <span class="cm"># 4</span>
+<span class="bi">print</span>(math.<span class="fn">round</span>(<span class="nu">3.4</span>))  <span class="cm"># 3</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.pow(base, exp) -> number</div>
+            <div class="func-desc">Returns <code>base</code> raised to the power of <code>exp</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">pow</span>(<span class="nu">2</span>, <span class="nu">10</span>))  <span class="cm"># 1024</span>
+<span class="bi">print</span>(math.<span class="fn">pow</span>(<span class="nu">9</span>, <span class="nu">0.5</span>)) <span class="cm"># 3.0</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.min(a, b) -> number</div>
+            <div class="func-desc">Returns the smaller of <code>a</code> and <code>b</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">min</span>(<span class="nu">3</span>, <span class="nu">7</span>))  <span class="cm"># 3</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.max(a, b) -> number</div>
+            <div class="func-desc">Returns the larger of <code>a</code> and <code>b</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">max</span>(<span class="nu">3</span>, <span class="nu">7</span>))  <span class="cm"># 7</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.sin(x) -> float</div>
+            <div class="func-desc">Returns the sine of <code>x</code> (in radians).</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">sin</span>(<span class="nu">0</span>))        <span class="cm"># 0.0</span>
+<span class="bi">print</span>(math.<span class="fn">sin</span>(math.PI))  <span class="cm"># ~0.0</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.cos(x) -> float</div>
+            <div class="func-desc">Returns the cosine of <code>x</code> (in radians).</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">cos</span>(<span class="nu">0</span>))        <span class="cm"># 1.0</span>
+<span class="bi">print</span>(math.<span class="fn">cos</span>(math.PI))  <span class="cm"># -1.0</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.tan(x) -> float</div>
+            <div class="func-desc">Returns the tangent of <code>x</code> (in radians).</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">tan</span>(<span class="nu">0</span>))  <span class="cm"># 0.0</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">math.log(x) -> float</div>
+            <div class="func-desc">Returns the natural logarithm (base <em>e</em>) of <code>x</code>.</div>
+<pre><code><span class="bi">print</span>(math.<span class="fn">log</span>(<span class="nu">1</span>))       <span class="cm"># 0.0</span>
+<span class="bi">print</span>(math.<span class="fn">log</span>(math.E))  <span class="cm"># 1.0</span></code></pre>
+        </div>
+
+        <!-- ==================== IO ==================== -->
+        <div class="mod-header" id="io">
+            <h2>io</h2>
+            <span class="mod-badge">import "io"</span>
+        </div>
+        <p>Read and write files, check existence, list directories.</p>
+
+        <div class="func">
+            <div class="func-sig">io.read_file(path) -> string</div>
+            <div class="func-desc">Reads the entire contents of the file at <code>path</code> and returns it as a string. Raises an error if the file does not exist.</div>
+<pre><code><span class="kw">let</span> content <span class="op">=</span> io.<span class="fn">read_file</span>(<span class="st">"data.txt"</span>)
+<span class="bi">print</span>(content)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">io.write_file(path, content) -> none</div>
+            <div class="func-desc">Writes <code>content</code> to the file at <code>path</code>. Creates the file if it does not exist; overwrites it if it does.</div>
+<pre><code>io.<span class="fn">write_file</span>(<span class="st">"output.txt"</span>, <span class="st">"Hello, file!"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">io.file_exists(path) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if a file exists at <code>path</code>, <code>false</code> otherwise.</div>
+<pre><code><span class="kw">if</span> io.<span class="fn">file_exists</span>(<span class="st">"config.json"</span>) <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Config found"</span>)
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">io.remove_file(path) -> none</div>
+            <div class="func-desc">Deletes the file at <code>path</code>. Raises an error if the file does not exist.</div>
+<pre><code>io.<span class="fn">remove_file</span>(<span class="st">"temp.txt"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">io.list_dir(path) -> list</div>
+            <div class="func-desc">Returns a list of file and directory names in the directory at <code>path</code>.</div>
+<pre><code><span class="kw">let</span> files <span class="op">=</span> io.<span class="fn">list_dir</span>(<span class="st">"."</span>)
+<span class="kw">for</span> f <span class="kw">in</span> files <span class="kw">do</span>
+    <span class="bi">print</span>(f)
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <!-- ==================== STRING ==================== -->
+        <div class="mod-header" id="string">
+            <h2>string</h2>
+            <span class="mod-badge">import "string"</span>
+        </div>
+        <p>Functions for manipulating and inspecting strings.</p>
+
+        <div class="func">
+            <div class="func-sig">string.replace(s, old, new) -> string</div>
+            <div class="func-desc">Returns a new string with all occurrences of <code>old</code> in <code>s</code> replaced by <code>new</code>.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">replace</span>(<span class="st">"hello world"</span>, <span class="st">"world"</span>, <span class="st">"Nova"</span>))
+<span class="cm"># hello Nova</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.starts_with(s, prefix) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>s</code> starts with <code>prefix</code>.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">starts_with</span>(<span class="st">"hello"</span>, <span class="st">"he"</span>))  <span class="cm"># true</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.ends_with(s, suffix) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>s</code> ends with <code>suffix</code>.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">ends_with</span>(<span class="st">"hello.nova"</span>, <span class="st">".nova"</span>))  <span class="cm"># true</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.trim(s) -> string</div>
+            <div class="func-desc">Returns <code>s</code> with leading and trailing whitespace removed.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">trim</span>(<span class="st">"  hello  "</span>))  <span class="cm"># "hello"</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.join(list, separator) -> string</div>
+            <div class="func-desc">Joins the elements of <code>list</code> into a single string, separated by <code>separator</code>.</div>
+<pre><code><span class="kw">let</span> words <span class="op">=</span> [<span class="st">"hello"</span>, <span class="st">"world"</span>]
+<span class="bi">print</span>(string.<span class="fn">join</span>(words, <span class="st">" "</span>))  <span class="cm"># hello world</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.contains(s, substr) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>s</code> contains <code>substr</code>.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">contains</span>(<span class="st">"hello world"</span>, <span class="st">"world"</span>))  <span class="cm"># true</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.char_at(s, index) -> string</div>
+            <div class="func-desc">Returns the character at position <code>index</code> in <code>s</code> (0-based).</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">char_at</span>(<span class="st">"Nova"</span>, <span class="nu">0</span>))  <span class="cm"># N</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.to_upper(s) -> string</div>
+            <div class="func-desc">Returns <code>s</code> converted to uppercase.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">to_upper</span>(<span class="st">"hello"</span>))  <span class="cm"># HELLO</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.to_lower(s) -> string</div>
+            <div class="func-desc">Returns <code>s</code> converted to lowercase.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">to_lower</span>(<span class="st">"HELLO"</span>))  <span class="cm"># hello</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">string.substr(s, start, length) -> string</div>
+            <div class="func-desc">Returns a substring of <code>s</code> starting at <code>start</code> with the given <code>length</code>.</div>
+<pre><code><span class="bi">print</span>(string.<span class="fn">substr</span>(<span class="st">"Hello, World"</span>, <span class="nu">7</span>, <span class="nu">5</span>))  <span class="cm"># World</span></code></pre>
+        </div>
+
+        <!-- ==================== OS ==================== -->
+        <div class="mod-header" id="os">
+            <h2>os</h2>
+            <span class="mod-badge">import "os"</span>
+        </div>
+        <p>Operating system interface: command-line arguments, environment variables, timing, and process control.</p>
+
+        <div class="func">
+            <div class="func-sig">os.args -> list</div>
+            <div class="func-desc">A list of command-line arguments passed to the Nova program.</div>
+<pre><code><span class="cm"># Run: nova script.nova hello world</span>
+<span class="bi">print</span>(os.args)  <span class="cm"># ["hello", "world"]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">os.env(name) -> string</div>
+            <div class="func-desc">Returns the value of the environment variable <code>name</code>, or <code>none</code> if it is not set.</div>
+<pre><code><span class="kw">let</span> home <span class="op">=</span> os.<span class="fn">env</span>(<span class="st">"HOME"</span>)
+<span class="bi">print</span>(home)  <span class="cm"># /home/user</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">os.clock() -> float</div>
+            <div class="func-desc">Returns the current time in seconds since the Unix epoch (high-resolution).</div>
+<pre><code><span class="kw">let</span> start <span class="op">=</span> os.<span class="fn">clock</span>()
+<span class="cm"># ... do work ...</span>
+<span class="kw">let</span> elapsed <span class="op">=</span> os.<span class="fn">clock</span>() <span class="op">-</span> start
+<span class="bi">print</span>(<span class="st">"Took {elapsed} seconds"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">os.exit(code) -> none</div>
+            <div class="func-desc">Terminates the program immediately with exit code <code>code</code>.</div>
+<pre><code><span class="kw">if</span> <span class="kw">not</span> is_valid <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Invalid input"</span>)
+    os.<span class="fn">exit</span>(<span class="nu">1</span>)
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">os.system(command) -> int</div>
+            <div class="func-desc">Executes a shell command and returns the exit code.</div>
+<pre><code><span class="kw">let</span> code <span class="op">=</span> os.<span class="fn">system</span>(<span class="st">"ls -la"</span>)
+<span class="bi">print</span>(<span class="st">"Exit code: {code}"</span>)</code></pre>
+        </div>
+
+        <!-- ==================== RANDOM ==================== -->
+        <div class="mod-header" id="random">
+            <h2>random</h2>
+            <span class="mod-badge">import "random"</span>
+        </div>
+        <p>Pseudorandom number generation and selection utilities.</p>
+
+        <div class="func">
+            <div class="func-sig">random.random() -> float</div>
+            <div class="func-desc">Returns a random floating-point number in the range [0.0, 1.0).</div>
+<pre><code><span class="kw">let</span> r <span class="op">=</span> random.<span class="fn">random</span>()
+<span class="bi">print</span>(r)  <span class="cm"># e.g. 0.7312...</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">random.randint(min, max) -> int</div>
+            <div class="func-desc">Returns a random integer between <code>min</code> and <code>max</code> (inclusive).</div>
+<pre><code><span class="kw">let</span> roll <span class="op">=</span> random.<span class="fn">randint</span>(<span class="nu">1</span>, <span class="nu">6</span>)
+<span class="bi">print</span>(<span class="st">"You rolled a {roll}"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">random.choice(list) -> any</div>
+            <div class="func-desc">Returns a random element from <code>list</code>.</div>
+<pre><code><span class="kw">let</span> colors <span class="op">=</span> [<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>]
+<span class="bi">print</span>(random.<span class="fn">choice</span>(colors))  <span class="cm"># e.g. "green"</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">random.shuffle(list) -> list</div>
+            <div class="func-desc">Returns a new list with the elements of <code>list</code> in random order.</div>
+<pre><code><span class="kw">let</span> cards <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>, <span class="nu">5</span>]
+<span class="kw">let</span> shuffled <span class="op">=</span> random.<span class="fn">shuffle</span>(cards)
+<span class="bi">print</span>(shuffled)  <span class="cm"># e.g. [3, 1, 5, 2, 4]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">random.seed(n) -> none</div>
+            <div class="func-desc">Seeds the random number generator with <code>n</code> for reproducible results.</div>
+<pre><code>random.<span class="fn">seed</span>(<span class="nu">42</span>)
+<span class="bi">print</span>(random.<span class="fn">random</span>())  <span class="cm"># always the same value</span></code></pre>
+        </div>
+
+        <!-- ==================== JSON ==================== -->
+        <div class="mod-header" id="json">
+            <h2>json</h2>
+            <span class="mod-badge">import "json"</span>
+        </div>
+        <p>Parse JSON strings into Nova values and serialize Nova values into JSON strings.</p>
+
+        <div class="func">
+            <div class="func-sig">json.parse(s) -> any</div>
+            <div class="func-desc">Parses the JSON string <code>s</code> and returns the corresponding Nova value (dict, list, string, number, bool, or none). Raises an error if the string is not valid JSON.</div>
+<pre><code><span class="kw">let</span> data <span class="op">=</span> json.<span class="fn">parse</span>(<span class="st">'{"name": "Nova", "version": 1}'</span>)
+<span class="bi">print</span>(data[<span class="st">"name"</span>])     <span class="cm"># Nova</span>
+<span class="bi">print</span>(data[<span class="st">"version"</span>])  <span class="cm"># 1</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">json.dump(value) -> string</div>
+            <div class="func-desc">Serializes a Nova value into a JSON string. Works with dicts, lists, strings, numbers, booleans, and none.</div>
+<pre><code><span class="kw">let</span> obj <span class="op">=</span> {<span class="st">"name"</span>: <span class="st">"Nova"</span>, <span class="st">"tags"</span>: [<span class="st">"fast"</span>, <span class="st">"elegant"</span>]}
+<span class="kw">let</span> text <span class="op">=</span> json.<span class="fn">dump</span>(obj)
+<span class="bi">print</span>(text)
+<span class="cm"># {"name":"Nova","tags":["fast","elegant"]}</span>
+
+<span class="cm"># Useful for saving data to a file</span>
+io.<span class="fn">write_file</span>(<span class="st">"out.json"</span>, text)</code></pre>
+        </div>
+
+        <!-- ==================== COLLECTIONS ==================== -->
+        <div class="mod-header" id="collections">
+            <h2>collections</h2>
+            <span class="mod-badge">import "collections"</span>
+        </div>
+        <p>Higher-order functions for transforming, filtering, and querying lists.</p>
+
+        <div class="func">
+            <div class="func-sig">collections.map(list, func) -> list</div>
+            <div class="func-desc">Applies <code>func</code> to each element of <code>list</code> and returns a new list of the results.</div>
+<pre><code><span class="kw">let</span> nums <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>]
+<span class="kw">let</span> doubled <span class="op">=</span> collections.<span class="fn">map</span>(nums, (x) <span class="op">=&gt;</span> x <span class="op">*</span> <span class="nu">2</span>)
+<span class="bi">print</span>(doubled)  <span class="cm"># [2, 4, 6, 8]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.filter(list, func) -> list</div>
+            <div class="func-desc">Returns a new list containing only the elements for which <code>func</code> returns a truthy value.</div>
+<pre><code><span class="kw">let</span> nums <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>, <span class="nu">5</span>, <span class="nu">6</span>]
+<span class="kw">let</span> evens <span class="op">=</span> collections.<span class="fn">filter</span>(nums, (x) <span class="op">=&gt;</span> x <span class="op">%</span> <span class="nu">2</span> <span class="op">==</span> <span class="nu">0</span>)
+<span class="bi">print</span>(evens)  <span class="cm"># [2, 4, 6]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.reduce(list, func, initial) -> any</div>
+            <div class="func-desc">Folds <code>list</code> into a single value by applying <code>func(accumulator, element)</code> for each element, starting with <code>initial</code>.</div>
+<pre><code><span class="kw">let</span> sum <span class="op">=</span> collections.<span class="fn">reduce</span>([<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>], (acc, x) <span class="op">=&gt;</span> acc <span class="op">+</span> x, <span class="nu">0</span>)
+<span class="bi">print</span>(sum)  <span class="cm"># 10</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.sort(list) -> list</div>
+            <div class="func-desc">Returns a sorted copy of <code>list</code>. Numbers are sorted before strings.</div>
+<pre><code><span class="bi">print</span>(collections.<span class="fn">sort</span>([<span class="nu">3</span>, <span class="nu">1</span>, <span class="nu">4</span>, <span class="nu">1</span>, <span class="nu">5</span>]))  <span class="cm"># [1, 1, 3, 4, 5]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.sort_by(list, func) -> list</div>
+            <div class="func-desc">Returns a sorted copy of <code>list</code>, ordered by the key returned by <code>func</code> for each element.</div>
+<pre><code><span class="kw">let</span> words <span class="op">=</span> [<span class="st">"banana"</span>, <span class="st">"fig"</span>, <span class="st">"apple"</span>]
+<span class="kw">let</span> by_len <span class="op">=</span> collections.<span class="fn">sort_by</span>(words, (w) <span class="op">=&gt;</span> <span class="bi">len</span>(w))
+<span class="bi">print</span>(by_len)  <span class="cm"># ["fig", "apple", "banana"]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.reverse(list) -> list</div>
+            <div class="func-desc">Returns a reversed copy of <code>list</code>.</div>
+<pre><code><span class="bi">print</span>(collections.<span class="fn">reverse</span>([<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>]))  <span class="cm"># [3, 2, 1]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.zip(list1, list2) -> list</div>
+            <div class="func-desc">Pairs elements from two lists into <code>[a, b]</code> sublists. Stops at the shorter list.</div>
+<pre><code><span class="kw">let</span> pairs <span class="op">=</span> collections.<span class="fn">zip</span>([<span class="st">"a"</span>, <span class="st">"b"</span>], [<span class="nu">1</span>, <span class="nu">2</span>])
+<span class="bi">print</span>(pairs)  <span class="cm"># [["a", 1], ["b", 2]]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.enumerate(list) -> list</div>
+            <div class="func-desc">Returns a list of <code>[index, value]</code> pairs.</div>
+<pre><code><span class="kw">let</span> items <span class="op">=</span> collections.<span class="fn">enumerate</span>([<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>])
+<span class="cm"># [[0, "a"], [1, "b"], [2, "c"]]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.find(list, func) -> any</div>
+            <div class="func-desc">Returns the first element for which <code>func</code> returns truthy, or <code>none</code> if no match.</div>
+<pre><code><span class="kw">let</span> found <span class="op">=</span> collections.<span class="fn">find</span>([<span class="nu">1</span>, <span class="nu">4</span>, <span class="nu">9</span>], (x) <span class="op">=&gt;</span> x <span class="op">&gt;</span> <span class="nu">3</span>)
+<span class="bi">print</span>(found)  <span class="cm"># 4</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.every(list, func) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>func</code> returns truthy for every element in <code>list</code>.</div>
+<pre><code><span class="bi">print</span>(collections.<span class="fn">every</span>([<span class="nu">2</span>, <span class="nu">4</span>, <span class="nu">6</span>], (x) <span class="op">=&gt;</span> x <span class="op">%</span> <span class="nu">2</span> <span class="op">==</span> <span class="nu">0</span>))  <span class="cm"># true</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.some(list, func) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>func</code> returns truthy for at least one element in <code>list</code>.</div>
+<pre><code><span class="bi">print</span>(collections.<span class="fn">some</span>([<span class="nu">1</span>, <span class="nu">3</span>, <span class="nu">4</span>], (x) <span class="op">=&gt;</span> x <span class="op">%</span> <span class="nu">2</span> <span class="op">==</span> <span class="nu">0</span>))  <span class="cm"># true</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">collections.flat(list) -> list</div>
+            <div class="func-desc">Flattens one level of nesting. Sublists are expanded; non-list elements are kept as-is.</div>
+<pre><code><span class="bi">print</span>(collections.<span class="fn">flat</span>([[<span class="nu">1</span>, <span class="nu">2</span>], [<span class="nu">3</span>], [<span class="nu">4</span>, <span class="nu">5</span>]]))  <span class="cm"># [1, 2, 3, 4, 5]</span></code></pre>
+        </div>
+
+        <!-- ==================== PATH ==================== -->
+        <div class="mod-header" id="path">
+            <h2>path</h2>
+            <span class="mod-badge">import "path"</span>
+        </div>
+        <p>File path manipulation: join, split, and inspect paths.</p>
+
+        <div class="func">
+            <div class="func-sig">path.join(parts...) -> string</div>
+            <div class="func-desc">Joins path components with the system separator.</div>
+<pre><code><span class="bi">print</span>(path.<span class="fn">join</span>(<span class="st">"home"</span>, <span class="st">"user"</span>, <span class="st">"file.nova"</span>))
+<span class="cm"># home/user/file.nova</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.basename(path) -> string</div>
+            <div class="func-desc">Returns the filename component of <code>path</code>.</div>
+<pre><code><span class="bi">print</span>(path.<span class="fn">basename</span>(<span class="st">"/home/user/file.nova"</span>))  <span class="cm"># file.nova</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.dirname(path) -> string</div>
+            <div class="func-desc">Returns the directory component of <code>path</code>.</div>
+<pre><code><span class="bi">print</span>(path.<span class="fn">dirname</span>(<span class="st">"/home/user/file.nova"</span>))  <span class="cm"># /home/user</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.extension(path) -> string</div>
+            <div class="func-desc">Returns the file extension including the dot, or an empty string if none.</div>
+<pre><code><span class="bi">print</span>(path.<span class="fn">extension</span>(<span class="st">"script.nova"</span>))  <span class="cm"># .nova</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.exists(path) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>path</code> exists on the file system.</div>
+<pre><code><span class="kw">if</span> path.<span class="fn">exists</span>(<span class="st">"config.json"</span>) <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="st">"Found config"</span>)
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.is_dir(path) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>path</code> is a directory.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.is_file(path) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>path</code> is a regular file.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">path.absolute(path) -> string</div>
+            <div class="func-desc">Resolves <code>path</code> to an absolute path.</div>
+<pre><code><span class="bi">print</span>(path.<span class="fn">absolute</span>(<span class="st">"."</span>))  <span class="cm"># /Users/you/project</span></code></pre>
+        </div>
+
+        <!-- ==================== DATETIME ==================== -->
+        <div class="mod-header" id="datetime">
+            <h2>datetime</h2>
+            <span class="mod-badge">import "datetime"</span>
+        </div>
+        <p>Date and time operations: get the current time, format dates, and parse date strings.</p>
+
+        <div class="func">
+            <div class="func-sig">datetime.now() -> dict</div>
+            <div class="func-desc">Returns a dict with keys <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code>.</div>
+<pre><code><span class="kw">let</span> now <span class="op">=</span> datetime.<span class="fn">now</span>()
+<span class="bi">print</span>(<span class="st">"{now[\"year\"]}-{now[\"month\"]}-{now[\"day\"]}"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">datetime.timestamp() -> float</div>
+            <div class="func-desc">Returns the current Unix timestamp as a float (seconds since epoch).</div>
+<pre><code><span class="kw">let</span> ts <span class="op">=</span> datetime.<span class="fn">timestamp</span>()
+<span class="bi">print</span>(ts)  <span class="cm"># e.g. 1700000000.123</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">datetime.format(timestamp, fmt) -> string</div>
+            <div class="func-desc">Formats a Unix timestamp using <code>strftime</code> format codes.</div>
+<pre><code><span class="kw">let</span> ts <span class="op">=</span> datetime.<span class="fn">timestamp</span>()
+<span class="bi">print</span>(datetime.<span class="fn">format</span>(ts, <span class="st">"%Y-%m-%d %H:%M:%S"</span>))</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">datetime.parse(date_str, fmt) -> float</div>
+            <div class="func-desc">Parses a date string using <code>strptime</code> format codes and returns a Unix timestamp.</div>
+<pre><code><span class="kw">let</span> ts <span class="op">=</span> datetime.<span class="fn">parse</span>(<span class="st">"2024-01-15"</span>, <span class="st">"%Y-%m-%d"</span>)
+<span class="bi">print</span>(datetime.<span class="fn">format</span>(ts, <span class="st">"%B %d, %Y"</span>))  <span class="cm"># January 15, 2024</span></code></pre>
+        </div>
+
+        <!-- ==================== CSV ==================== -->
+        <div class="mod-header" id="csv">
+            <h2>csv</h2>
+            <span class="mod-badge">import "csv"</span>
+        </div>
+        <p>Parse and generate CSV data (RFC 4180 compliant with quoted fields and escaped quotes).</p>
+
+        <div class="func">
+            <div class="func-sig">csv.parse(csv_string) -> list</div>
+            <div class="func-desc">Parses a CSV string into a list of lists (rows of fields).</div>
+<pre><code><span class="kw">let</span> data <span class="op">=</span> csv.<span class="fn">parse</span>(<span class="st">"name,age\nAlice,30\nBob,25"</span>)
+<span class="bi">print</span>(data[<span class="nu">0</span>])  <span class="cm"># ["name", "age"]</span>
+<span class="bi">print</span>(data[<span class="nu">1</span>])  <span class="cm"># ["Alice", "30"]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">csv.dump(data) -> string</div>
+            <div class="func-desc">Converts a list of lists into a CSV string.</div>
+<pre><code><span class="kw">let</span> rows <span class="op">=</span> [[<span class="st">"name"</span>, <span class="st">"age"</span>], [<span class="st">"Alice"</span>, <span class="st">"30"</span>]]
+<span class="bi">print</span>(csv.<span class="fn">dump</span>(rows))
+<span class="cm"># name,age</span>
+<span class="cm"># Alice,30</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">csv.parse_file(path) -> list</div>
+            <div class="func-desc">Reads a CSV file from disk and parses it into a list of lists.</div>
+<pre><code><span class="kw">let</span> data <span class="op">=</span> csv.<span class="fn">parse_file</span>(<span class="st">"data.csv"</span>)
+<span class="kw">for</span> row <span class="kw">in</span> data <span class="kw">do</span>
+    <span class="bi">print</span>(row)
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <!-- ==================== REGEX ==================== -->
+        <div class="mod-header" id="regex">
+            <h2>regex</h2>
+            <span class="mod-badge">import "regex"</span>
+        </div>
+        <p>Regular expression matching and replacement using POSIX extended regex syntax.</p>
+
+        <div class="func">
+            <div class="func-sig">regex.match(pattern, string) -> dict | none</div>
+            <div class="func-desc">Returns a dict <code>{match, start, end}</code> for the first match, or <code>none</code> if no match.</div>
+<pre><code><span class="kw">let</span> m <span class="op">=</span> regex.<span class="fn">match</span>(<span class="st">"[0-9]+"</span>, <span class="st">"age: 42"</span>)
+<span class="bi">print</span>(m[<span class="st">"match"</span>])  <span class="cm"># 42</span>
+<span class="bi">print</span>(m[<span class="st">"start"</span>])  <span class="cm"># 5</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">regex.find_all(pattern, string) -> list</div>
+            <div class="func-desc">Returns a list of all non-overlapping match strings.</div>
+<pre><code><span class="kw">let</span> nums <span class="op">=</span> regex.<span class="fn">find_all</span>(<span class="st">"[0-9]+"</span>, <span class="st">"a1 b22 c333"</span>)
+<span class="bi">print</span>(nums)  <span class="cm"># ["1", "22", "333"]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">regex.replace(pattern, string, replacement) -> string</div>
+            <div class="func-desc">Replaces all matches of <code>pattern</code> in <code>string</code> with <code>replacement</code>.</div>
+<pre><code><span class="kw">let</span> result <span class="op">=</span> regex.<span class="fn">replace</span>(<span class="st">"[0-9]+"</span>, <span class="st">"a1b2c3"</span>, <span class="st">"#"</span>)
+<span class="bi">print</span>(result)  <span class="cm"># a#b#c#</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">regex.test(pattern, string) -> bool</div>
+            <div class="func-desc">Returns <code>true</code> if <code>pattern</code> matches anywhere in <code>string</code>.</div>
+<pre><code><span class="bi">print</span>(regex.<span class="fn">test</span>(<span class="st">"^[a-z]+$"</span>, <span class="st">"hello"</span>))  <span class="cm"># true</span>
+<span class="bi">print</span>(regex.<span class="fn">test</span>(<span class="st">"^[a-z]+$"</span>, <span class="st">"Hello"</span>))  <span class="cm"># false</span></code></pre>
+        </div>
+
+        <!-- ==================== HTTP ==================== -->
+        <div class="mod-header" id="http">
+            <h2>http</h2>
+            <span class="mod-badge">import "http"</span>
+        </div>
+        <p>HTTP client for making web requests. <strong>Optional</strong> &mdash; only available when Nova is built with libcurl.</p>
+
+        <div class="func">
+            <div class="func-sig">http.get(url) -> dict</div>
+            <div class="func-desc">Performs an HTTP GET request. Returns a dict with <code>status</code> (int), <code>body</code> (string), and <code>headers</code> (dict).</div>
+<pre><code><span class="kw">let</span> res <span class="op">=</span> http.<span class="fn">get</span>(<span class="st">"https://api.example.com/data"</span>)
+<span class="kw">if</span> res[<span class="st">"status"</span>] <span class="op">==</span> <span class="nu">200</span> <span class="kw">do</span>
+    <span class="kw">let</span> data <span class="op">=</span> json.<span class="fn">parse</span>(res[<span class="st">"body"</span>])
+    <span class="bi">print</span>(data)
+<span class="kw">done</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">http.post(url, body) -> dict</div>
+            <div class="func-desc">Performs an HTTP POST request with the given body. Returns the same shape as <code>http.get()</code>.</div>
+<pre><code><span class="kw">let</span> payload <span class="op">=</span> json.<span class="fn">dump</span>({<span class="st">"name"</span>: <span class="st">"Nova"</span>})
+<span class="kw">let</span> res <span class="op">=</span> http.<span class="fn">post</span>(<span class="st">"https://api.example.com/items"</span>, payload)
+<span class="bi">print</span>(res[<span class="st">"status"</span>])</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">http.download(url, path) -> bool</div>
+            <div class="func-desc">Downloads a file from <code>url</code> and saves it to <code>path</code>. Returns <code>true</code> on success.</div>
+<pre><code>http.<span class="fn">download</span>(<span class="st">"https://example.com/file.zip"</span>, <span class="st">"file.zip"</span>)
+<span class="bi">print</span>(<span class="st">"Downloaded!"</span>)</code></pre>
+        </div>
+
+        <!-- ==================== BUILTINS ==================== -->
+        <div class="mod-header" id="builtins">
+            <h2>Built-in Functions</h2>
+            <span class="mod-badge">always available</span>
+        </div>
+        <p>These functions are available globally without any import.</p>
+
+        <div class="func">
+            <div class="func-sig">print(value) -> none</div>
+            <div class="func-desc">Prints <code>value</code> to standard output followed by a newline.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">input(prompt) -> string</div>
+            <div class="func-desc">Displays <code>prompt</code> and reads a line from standard input. Returns the input as a string.</div>
+<pre><code><span class="kw">let</span> name <span class="op">=</span> <span class="bi">input</span>(<span class="st">"What is your name? "</span>)
+<span class="bi">print</span>(<span class="st">"Hello, {name}!"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">len(value) -> int</div>
+            <div class="func-desc">Returns the length of a string, list, or dict.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">str(value) -> string</div>
+            <div class="func-desc">Converts <code>value</code> to its string representation.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">int(value) -> int</div>
+            <div class="func-desc">Converts a string or float to an integer.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">float(value) -> float</div>
+            <div class="func-desc">Converts a string or integer to a float.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">type(value) -> string</div>
+            <div class="func-desc">Returns the type name of <code>value</code> as a string (e.g. <code>"int"</code>, <code>"string"</code>, <code>"list"</code>).</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">range(start, end) -> list</div>
+            <div class="func-desc">Returns a list of integers from <code>start</code> (inclusive) to <code>end</code> (exclusive).</div>
+<pre><code><span class="bi">print</span>(<span class="bi">range</span>(<span class="nu">0</span>, <span class="nu">5</span>))  <span class="cm"># [0, 1, 2, 3, 4]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">append(list, value) -> none</div>
+            <div class="func-desc">Appends <code>value</code> to the end of <code>list</code>. Modifies the list in place.</div>
+<pre><code><span class="kw">let</span> items <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>]
+<span class="bi">append</span>(items, <span class="nu">4</span>)
+<span class="bi">print</span>(items)  <span class="cm"># [1, 2, 3, 4]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">assert(expr, message?) -> none</div>
+            <div class="func-desc">Asserts that <code>expr</code> is truthy. If not, raises an error with the optional <code>message</code>.</div>
+<pre><code><span class="fn">assert</span>(<span class="nu">1</span> <span class="op">+</span> <span class="nu">1</span> <span class="op">==</span> <span class="nu">2</span>)
+<span class="fn">assert</span>(<span class="bi">len</span>([<span class="nu">1</span>, <span class="nu">2</span>]) <span class="op">==</span> <span class="nu">2</span>, <span class="st">"list should have 2 elements"</span>)</code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">slice(list, start, end) -> list</div>
+            <div class="func-desc">Returns a new list containing elements from <code>start</code> (inclusive) to <code>end</code> (exclusive).</div>
+<pre><code><span class="kw">let</span> items <span class="op">=</span> [<span class="nu">10</span>, <span class="nu">20</span>, <span class="nu">30</span>, <span class="nu">40</span>, <span class="nu">50</span>]
+<span class="bi">print</span>(<span class="bi">slice</span>(items, <span class="nu">1</span>, <span class="nu">4</span>))  <span class="cm"># [20, 30, 40]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">remove_at(list, index) -> value</div>
+            <div class="func-desc">Removes and returns the element at <code>index</code> from <code>list</code>. Modifies the list in place.</div>
+<pre><code><span class="kw">let</span> items <span class="op">=</span> [<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>]
+<span class="kw">let</span> removed <span class="op">=</span> <span class="bi">remove_at</span>(items, <span class="nu">1</span>)
+<span class="bi">print</span>(removed)  <span class="cm"># b</span>
+<span class="bi">print</span>(items)    <span class="cm"># [a, c]</span></code></pre>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">insert(list, index, value) -> none</div>
+            <div class="func-desc">Inserts <code>value</code> at <code>index</code> in <code>list</code>, shifting subsequent elements right. Modifies the list in place.</div>
+<pre><code><span class="kw">let</span> items <span class="op">=</span> [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>]
+<span class="bi">insert</span>(items, <span class="nu">1</span>, <span class="nu">99</span>)
+<span class="bi">print</span>(items)  <span class="cm"># [1, 99, 2, 3]</span></code></pre>
+        </div>
+
+        <div class="note">
+            <p><strong>Next:</strong> Learn how to extend Nova with community packages in the <a href="packages.html">Package Guide</a>.</p>
+        </div>
+
+        <div class="footer">
+            Built with love for the Nova community.
+        </div>
+    </div>
+</body>
+</html>

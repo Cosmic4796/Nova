@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packages - Nova Programming Language</title>
+    <meta name="description" content="Learn how to create, publish, install, and use Nova packages from the community.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-mark">N</span>
+                Nova
+            </a>
+            <ul class="nav-links">
+                <li><a href="getting-started.html">Guide</a></li>
+                <li><a href="stdlib.html">Standard Library</a></li>
+                <li><a href="packages.html" class="active">Packages</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page">
+        <h1 class="page-title">Packages</h1>
+        <p class="page-subtitle">Extend Nova with reusable community packages hosted on GitHub.</p>
+
+        <div class="toc">
+            <div class="toc-title">On this page</div>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#installing">Installing Packages</a></li>
+                <li><a href="#using">Using Packages</a></li>
+                <li><a href="#creating">Creating a Package</a></li>
+                <li><a href="#manifest">The nova.json Manifest</a></li>
+                <li><a href="#publishing">Publishing to GitHub</a></li>
+                <li><a href="#structure">Package Directory Structure</a></li>
+                <li><a href="#testing">Testing Your Package</a></li>
+            </ul>
+        </div>
+
+        <!-- Overview -->
+        <h2 id="overview">Overview</h2>
+        <p>Nova has a simple, Git-based package system. Packages are GitHub repositories that contain Nova source files and a <code>nova.json</code> manifest. There is no central registry &mdash; any GitHub repository with a valid manifest can be installed as a Nova package.</p>
+
+        <p>Key concepts:</p>
+        <ul>
+            <li><strong>nova.json</strong> &mdash; a manifest file describing the package (name, version, entry point)</li>
+            <li><strong>nova_packages/</strong> &mdash; the local directory where installed packages are stored</li>
+            <li><strong><code>nova install</code></strong> &mdash; the command to install a package from GitHub</li>
+            <li><strong><code>nova test</code></strong> &mdash; the built-in test runner for packages and projects</li>
+        </ul>
+
+        <!-- Installing -->
+        <h2 id="installing">Installing Packages</h2>
+        <p>Install a package by pointing <code>nova install</code> at a GitHub URL:</p>
+<pre><code>nova install https://github.com/username/nova-http</code></pre>
+
+        <p>This clones the repository into your project's <code>nova_packages/</code> directory:</p>
+<pre><code>my-project/
+  main.nova
+  nova_packages/
+    nova-http/
+      nova.json
+      http.nova
+      ...</code></pre>
+
+        <div class="note">
+            <p><strong>Note:</strong> The <code>nova_packages/</code> directory is created automatically if it does not exist. You should add it to your <code>.gitignore</code> if you are using version control.</p>
+        </div>
+
+        <h3>Installing Specific Versions</h3>
+        <p>Package versioning follows Git tags. By default, the latest commit on the default branch is installed.</p>
+
+        <!-- Using -->
+        <h2 id="using">Using Packages</h2>
+        <p>Once installed, import the package by its name (as declared in its <code>nova.json</code>):</p>
+<pre><code><span class="kw">import</span> <span class="st">"nova-http"</span>
+
+<span class="kw">let</span> response <span class="op">=</span> nova_http.<span class="fn">get</span>(<span class="st">"https://api.example.com/data"</span>)
+<span class="bi">print</span>(response.body)</code></pre>
+
+        <p>Nova resolves imports in the following order:</p>
+        <ol>
+            <li>Built-in standard library modules (<code>math</code>, <code>io</code>, etc.)</li>
+            <li>Files relative to the current script</li>
+            <li>Packages in <code>nova_packages/</code></li>
+        </ol>
+
+        <!-- Creating -->
+        <h2 id="creating">Creating a Package</h2>
+        <p>A Nova package is simply a directory (and GitHub repository) containing:</p>
+        <ol>
+            <li>A <code>nova.json</code> manifest file</li>
+            <li>One or more <code>.nova</code> source files</li>
+            <li>Optionally, test files (<code>*_test.nova</code>)</li>
+        </ol>
+
+        <h3>Step 1: Create the Directory</h3>
+<pre><code>mkdir nova-mylib
+cd nova-mylib</code></pre>
+
+        <h3>Step 2: Write the Manifest</h3>
+        <p>Create a <code>nova.json</code> file at the root of your package:</p>
+<pre><code>{
+    <span class="st">"name"</span>: <span class="st">"nova-mylib"</span>,
+    <span class="st">"version"</span>: <span class="st">"1.0.0"</span>,
+    <span class="st">"description"</span>: <span class="st">"A helpful utility library for Nova"</span>,
+    <span class="st">"main"</span>: <span class="st">"mylib.nova"</span>,
+    <span class="st">"author"</span>: <span class="st">"Your Name"</span>,
+    <span class="st">"license"</span>: <span class="st">"MIT"</span>
+}</code></pre>
+
+        <h3>Step 3: Write Your Code</h3>
+<pre><code><span class="cm"># mylib.nova - the main entry point</span>
+
+<span class="kw">func</span> <span class="fn">capitalize</span>(s) <span class="kw">do</span>
+    <span class="kw">import</span> <span class="st">"string"</span>
+    <span class="kw">if</span> <span class="bi">len</span>(s) <span class="op">==</span> <span class="nu">0</span> <span class="kw">do</span>
+        <span class="kw">return</span> s
+    <span class="kw">done</span>
+    <span class="kw">let</span> first <span class="op">=</span> string.<span class="fn">to_upper</span>(string.<span class="fn">char_at</span>(s, <span class="nu">0</span>))
+    <span class="kw">let</span> rest <span class="op">=</span> string.<span class="fn">substr</span>(s, <span class="nu">1</span>, <span class="bi">len</span>(s) <span class="op">-</span> <span class="nu">1</span>)
+    <span class="kw">return</span> first <span class="op">+</span> rest
+<span class="kw">done</span>
+
+<span class="kw">func</span> <span class="fn">repeat</span>(s, n) <span class="kw">do</span>
+    <span class="kw">let</span> result <span class="op">=</span> <span class="st">""</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">0</span>, n) <span class="kw">do</span>
+        result <span class="op">=</span> result <span class="op">+</span> s
+    <span class="kw">done</span>
+    <span class="kw">return</span> result
+<span class="kw">done</span></code></pre>
+
+        <!-- Manifest -->
+        <h2 id="manifest">The nova.json Manifest</h2>
+        <p>The <code>nova.json</code> file describes your package. Here are all the supported fields:</p>
+
+        <div class="func">
+            <div class="func-sig">"name" (required)</div>
+            <div class="func-desc">The package name. This is the identifier users will import. Should be lowercase, and may contain hyphens. Convention is to prefix with <code>nova-</code>.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">"version" (required)</div>
+            <div class="func-desc">The semantic version of the package, e.g. <code>"1.0.0"</code>, <code>"0.3.2"</code>.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">"description" (recommended)</div>
+            <div class="func-desc">A short description of what the package does.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">"main" (required)</div>
+            <div class="func-desc">The entry point file, relative to the package root. This is the file that gets loaded when a user imports the package.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">"author" (optional)</div>
+            <div class="func-desc">The name of the package author.</div>
+        </div>
+
+        <div class="func">
+            <div class="func-sig">"license" (optional)</div>
+            <div class="func-desc">The license under which the package is distributed (e.g. <code>"MIT"</code>, <code>"Apache-2.0"</code>).</div>
+        </div>
+
+        <h3>Full Example</h3>
+<pre><code>{
+    <span class="st">"name"</span>: <span class="st">"nova-http"</span>,
+    <span class="st">"version"</span>: <span class="st">"0.2.1"</span>,
+    <span class="st">"description"</span>: <span class="st">"HTTP client library for Nova"</span>,
+    <span class="st">"main"</span>: <span class="st">"http.nova"</span>,
+    <span class="st">"author"</span>: <span class="st">"Jane Doe"</span>,
+    <span class="st">"license"</span>: <span class="st">"MIT"</span>
+}</code></pre>
+
+        <!-- Publishing -->
+        <h2 id="publishing">Publishing to GitHub</h2>
+        <p>To share your package with the Nova community, push it to a public GitHub repository.</p>
+
+        <h3>Step 1: Initialize a Git Repository</h3>
+<pre><code>cd nova-mylib
+git init
+git add .
+git commit -m "Initial release"</code></pre>
+
+        <h3>Step 2: Create a GitHub Repository</h3>
+        <p>Create a new repository on GitHub (e.g. <code>username/nova-mylib</code>), then push:</p>
+<pre><code>git remote add origin https://github.com/username/nova-mylib.git
+git push -u origin main</code></pre>
+
+        <h3>Step 3: Tag a Release (Optional)</h3>
+<pre><code>git tag v1.0.0
+git push origin v1.0.0</code></pre>
+
+        <p>That is it. Anyone can now install your package with:</p>
+<pre><code>nova install https://github.com/username/nova-mylib</code></pre>
+
+        <!-- Structure -->
+        <h2 id="structure">Package Directory Structure</h2>
+        <p>A well-organized package follows this layout:</p>
+<pre><code>nova-mylib/
+  nova.json              <span class="cm"># Package manifest</span>
+  mylib.nova             <span class="cm"># Main entry point</span>
+  helpers.nova           <span class="cm"># Additional modules</span>
+  mylib_test.nova        <span class="cm"># Tests</span>
+  examples/
+    basic.nova           <span class="cm"># Usage examples</span>
+  README.md              <span class="cm"># Documentation</span>
+  LICENSE                <span class="cm"># License file</span></code></pre>
+
+        <div class="note">
+            <p><strong>Tip:</strong> Include a <code>README.md</code> in your package with usage examples. It will display on your GitHub repository page.</p>
+        </div>
+
+        <!-- Testing -->
+        <h2 id="testing">Testing Your Package</h2>
+        <p>Nova includes a built-in test runner. Create files ending in <code>_test.nova</code> and define test blocks:</p>
+<pre><code><span class="cm"># mylib_test.nova</span>
+<span class="kw">import</span> <span class="st">"mylib"</span>
+
+<span class="kw">test</span> <span class="st">"capitalize works on normal strings"</span> <span class="kw">do</span>
+    <span class="kw">let</span> result <span class="op">=</span> mylib.<span class="fn">capitalize</span>(<span class="st">"hello"</span>)
+    <span class="fn">assert</span>(result <span class="op">==</span> <span class="st">"Hello"</span>)
+<span class="kw">done</span>
+
+<span class="kw">test</span> <span class="st">"capitalize handles empty string"</span> <span class="kw">do</span>
+    <span class="kw">let</span> result <span class="op">=</span> mylib.<span class="fn">capitalize</span>(<span class="st">""</span>)
+    <span class="fn">assert</span>(result <span class="op">==</span> <span class="st">""</span>)
+<span class="kw">done</span>
+
+<span class="kw">test</span> <span class="st">"repeat creates repeated strings"</span> <span class="kw">do</span>
+    <span class="kw">let</span> result <span class="op">=</span> mylib.<span class="fn">repeat</span>(<span class="st">"ab"</span>, <span class="nu">3</span>)
+    <span class="fn">assert</span>(result <span class="op">==</span> <span class="st">"ababab"</span>)
+<span class="kw">done</span></code></pre>
+
+        <p>Run the tests from the command line:</p>
+<pre><code>nova test</code></pre>
+
+        <p>The test runner will:</p>
+        <ol>
+            <li>Discover all files matching <code>*_test.nova</code> in the current directory</li>
+            <li>Execute each <code>test "name" do ... done</code> block</li>
+            <li>Report which tests passed and which failed</li>
+            <li>Exit with code 0 if all tests pass, 1 otherwise</li>
+        </ol>
+
+        <h3>Assertions</h3>
+        <p>Use the <code>assert()</code> function inside test blocks. If the expression is falsy, the test fails with an error message.</p>
+<pre><code><span class="fn">assert</span>(<span class="nu">1</span> <span class="op">+</span> <span class="nu">1</span> <span class="op">==</span> <span class="nu">2</span>)                 <span class="cm"># passes</span>
+<span class="fn">assert</span>(<span class="bi">len</span>([<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>]) <span class="op">==</span> <span class="nu">3</span>)       <span class="cm"># passes</span>
+<span class="fn">assert</span>(<span class="bi">type</span>(<span class="st">"hello"</span>) <span class="op">==</span> <span class="st">"string"</span>)  <span class="cm"># passes</span></code></pre>
+
+        <div class="note">
+            <p><strong>CI Integration:</strong> Since <code>nova test</code> returns a non-zero exit code on failure, it integrates seamlessly with CI/CD systems like GitHub Actions.</p>
+        </div>
+
+        <div class="note">
+            <p><strong>Ready to build?</strong> Start with the <a href="getting-started.html">Getting Started guide</a> if you are new, or dive into the <a href="stdlib.html">Standard Library reference</a> to explore what is available out of the box.</p>
+        </div>
+
+        <div class="footer">
+            Built with love for the Nova community.
+        </div>
+    </div>
+</body>
+</html>

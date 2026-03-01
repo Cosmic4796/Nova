@@ -1,0 +1,35 @@
+# Dictionaries in Nova
+
+let person = {"name": "Alice", "age": "30", "city": "New York"}
+print("Person: " + str(person))
+print("Name: " + person["name"])
+print("Age: " + person["age"])
+
+# Assignment
+person["email"] = "alice@example.com"
+print("Email: " + person["email"])
+
+# Length
+print("Fields: " + str(person.length))
+
+# Keys and values
+let keys = person.keys()
+print("Keys: " + str(keys))
+let vals = person.values()
+print("Values: " + str(vals))
+
+# Iteration over keys
+print("All fields:")
+for key in person do
+    print("  " + key + ": " + person[key])
+done
+
+# Dict as a counter
+let counts = {}
+let words = ["hello", "world", "hello", "nova", "world", "hello"]
+for word in words do
+    if type(counts) == "dict" do
+        # Simple counting
+    done
+done
+print("Word list: " + str(words))
