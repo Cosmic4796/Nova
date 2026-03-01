@@ -40,8 +40,8 @@ print("sqrt(144) = {math.sqrt(144)}")
 Requires a C compiler (gcc or clang) and CMake 3.10+.
 
 ```bash
-git clone https://github.com/user/nova-c.git
-cd nova-c
+git clone https://github.com/Cosmic4796/Nova.git
+cd Nova
 mkdir build && cd build
 cmake ..
 cmake --build .
@@ -59,7 +59,7 @@ sudo cp stdlib/*.dylib /usr/local/bin/stdlib/   # macOS
 ### One-Line Install (macOS/Linux)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/user/nova-c/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/Cosmic4796/Nova/main/install.sh | sh
 ```
 
 ## Usage

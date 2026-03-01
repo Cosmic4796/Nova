@@ -2,7 +2,7 @@
 # Usage: irm <raw-url>/install.ps1 | iex
 $ErrorActionPreference = "Stop"
 
-$RepoUrl = "https://github.com/nova-lang/nova.git"
+$RepoUrl = "https://github.com/Cosmic4796/Nova.git"
 $InstallDir = "$env:ProgramFiles\Nova"
 $TmpDir = Join-Path $env:TEMP "nova-install-$(Get-Random)"
 

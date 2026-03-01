@@ -3,7 +3,7 @@
 # Usage: curl -fsSL <raw-url>/install.sh | sh
 set -e
 
-REPO_URL="https://github.com/nova-lang/nova.git"
+REPO_URL="https://github.com/Cosmic4796/Nova.git"
 INSTALL_DIR="/usr/local/bin"
 TMP_DIR="$(mktemp -d)"
 
